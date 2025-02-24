@@ -8,6 +8,7 @@ import eventRouter from './routes/event/event';
 import morgan from 'morgan'
 import { postRouter } from './routes/post';
 import cookieParser from 'cookie-parser';
+import router from './routes/router';
 
 const app = express();
 
@@ -21,11 +22,7 @@ app.use(cookieParser());
 
 app.use('/uploads', express.static('uploads'));
 
-app.use('/api/v1/user', userRouter);
-app.use('/api/v1/chat', chatRouter);
-app.use('/api/v1/forum', forumRouter);
-app.use('/api/v1/event', eventRouter);
-app.use('/api/v1/post', postRouter);
+app.use('/api/v1', router);
 
 app.listen(PORT, () => {
     console.log(`Server started on port ${PORT}`);
