@@ -6,7 +6,6 @@ import bcrypt from "bcryptjs";
 
 export const userRouter = express.Router();
 
-// Input validation helper
 function validateInput(data: any) {
   const { username, firstName, lastName, email, password } = data;
   if (!email?.includes('@') || !password || password.length < 6) {
@@ -15,7 +14,6 @@ function validateInput(data: any) {
   return true;
 }
 
-// Signup route
 userRouter.post("/signup", async (req: Request, res: Response): Promise<any> => {
   try {
     const { username, firstName, lastName, email, password } = req.body;
@@ -24,7 +22,6 @@ userRouter.post("/signup", async (req: Request, res: Response): Promise<any> => 
       return res.status(400).json({ message: "Invalid input data" });
     }
 
-    // Check if user exists (both username and email)
     const existingUser = await prisma.user.findFirst({
       where: {
         OR: [
@@ -42,7 +39,6 @@ userRouter.post("/signup", async (req: Request, res: Response): Promise<any> => 
       });
     }
 
-    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await prisma.user.create({
@@ -74,10 +70,10 @@ userRouter.post("/signup", async (req: Request, res: Response): Promise<any> => 
     );
 
     res.cookie("token", `Bearer ${token}`, {
-      httpOnly: false,  // Important for security
+      httpOnly: false,
       secure: false,
       sameSite: "lax",
-      maxAge: 24 * 60 * 60 * 1000 // 24 hours
+      maxAge: 24 * 60 * 60 * 1000
     });
 
     res.status(201).json({ user, token });
@@ -87,7 +83,6 @@ userRouter.post("/signup", async (req: Request, res: Response): Promise<any> => 
   }
 });
 
-// Login route
 userRouter.post("/login", async (req: Request, res: Response): Promise<any> => {
   try {
     const { email, password } = req.body;
@@ -141,7 +136,6 @@ userRouter.post("/login", async (req: Request, res: Response): Promise<any> => {
   }
 });
 
-// Logout route
 userRouter.post("/logout", (_req: Request, res: Response) => {
   try {
     res.cookie("token", "", {

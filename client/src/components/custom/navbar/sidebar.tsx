@@ -6,7 +6,7 @@ const Sidebar = () => {
     return (
         <Sheet>
             <SheetTrigger>
-                <Button className="bg-transparent flex items-center justify-center text-foreground w-[50px] h-[50px] hover:bg-slate-100 cursor-pointer rounded-full">
+                <Button variant={'ghost'} className="bg-transparent drop-shadow-none border-0 flex items-center justify-center text-foreground w-[50px] h-[50px] hover:bg-slate-100 cursor-pointer rounded-full">
                     <HamIcon />
                 </Button>
             </SheetTrigger>

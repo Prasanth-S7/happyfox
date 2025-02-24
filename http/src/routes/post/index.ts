@@ -93,7 +93,6 @@ postRouter.post('/create', loginMiddleware, async (req: Request, res: Response) 
       return res.status(400).json({ message: 'Title, content, and forum ID are required' });
     }
 
-    // Check if forum exists
     const forum = await prisma.forum.findUnique({
       where: { id: forumId }
     });
@@ -147,7 +146,6 @@ postRouter.post('/update', loginMiddleware, async (req: Request, res: Response) 
       return res.status(400).json({ message: 'Nothing to update' });
     }
 
-    // Check if user is admin of the forum or has ADMIN role
     const post = await prisma.post.findUnique({
       where: { id }
     });
@@ -160,7 +158,6 @@ postRouter.post('/update', loginMiddleware, async (req: Request, res: Response) 
       return res.status(403).json({ message: 'Not authorized to update this post' });
     }
 
-    // Check if forum exists
     const forum = await prisma.forum.findUnique({
       where: { id: forumId }
     });
@@ -207,7 +204,6 @@ postRouter.post('/delete', loginMiddleware, async (req: Request, res: Response) 
       return res.status(400).json({ message: 'Invalid post ID' });
     }
 
-    // Check if user is admin of the forum or has ADMIN role
     const post = await prisma.post.findUnique({
       where: { id }
     });
@@ -278,7 +274,6 @@ postRouter.get('/all/:id', async (req: Request, res: Response) => {
   }
 });
 
-// Get single post with details
 postRouter.get('/:id', async (req: Request, res: Response) => {
   try {
     const id = Number(req.params.id);

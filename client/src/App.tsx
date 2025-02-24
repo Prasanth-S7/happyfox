@@ -8,6 +8,8 @@ import ForumPage from "./pages/Forum/Forum";
 import ProjectPage from "./pages/Project/Project";
 import ChatPage from "./pages/Chat/Chat";
 import InboxPage from "./pages/Inbox/Inbox";
+import EventPage from "./pages/Event/Event";
+import AddEventForm from "./pages/Admin/Event/AddEventForm";
 import MainForum from "./pages/MainForum/MainForum";
 
 function App() {
@@ -52,7 +54,15 @@ function App() {
           path: '/inbox',
           element: <InboxPage />
         },
+        {
+          path: '/event',
+          element: <EventPage />
+        }
       ]
+    },
+    {
+      path: '/admin/event',
+      element: <AddEventForm />
     }
   ]);
   

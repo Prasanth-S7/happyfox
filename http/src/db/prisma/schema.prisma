@@ -102,3 +102,32 @@ model Chat {
   // Relationship
   author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
 }
+
+// Create relation betweent user and this
+
+// model Event {
+//   id              String   @id @default(cuid())
+//   title           String
+//   by              String
+//   avatar          String?
+//   date            DateTime
+//   registrationLink String?
+//   description     String   @db.Text
+//   image           String?
+//   category        String[]
+//   display         Int[]
+//   createdAt       DateTime @default(now())
+//   updatedAt       DateTime @updatedAt
+// }
+
+model Event {
+  id String @id @default(cuid())
+  title String
+  by String
+  avatar String
+  date String
+  link String
+  description String
+  category String
+  poster String
+}
