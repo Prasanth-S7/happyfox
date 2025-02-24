@@ -50,8 +50,6 @@ model User {
   techStack       String[]        @default([])
   projects        ProjectUser[]
   curatedTags     ProjectTag[]
-  posts           Post[]
-  chats           Chat[]
   votes           Vote[]
 }
 

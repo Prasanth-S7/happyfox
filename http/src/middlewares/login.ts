@@ -35,8 +35,8 @@ export const loginMiddleware = async (
 
     if (authHeader?.startsWith('Bearer ')) {
       token = authHeader.substring(7);
-    } else if (cookieToken?.startsWith('Bearer ')) {
-      token = cookieToken.substring(7);
+    } else if (cookieToken?.length > 0) {
+      token = cookieToken
     }
 
     if (!token) {
