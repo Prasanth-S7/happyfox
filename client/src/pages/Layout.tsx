@@ -5,7 +5,7 @@ import { Outlet } from "react-router-dom";
 
 const Layout = () => {
     return(
-        <div className="h-screen grid grid-rows-[7.8125vh_84.375vh_7.8125vh]">
+        <div className="h-screen grid grid-rows-[7.8125vh_84.375vh_7.8125vh] font-satoshi">
             <div className="top-navbar drop-shadow-md relative z-50">
                 <TopNavbar />
             </div>

@@ -8,6 +8,7 @@ import ForumPage from "./pages/Forum/Forum";
 import ProjectPage from "./pages/Project/Project";
 import ChatPage from "./pages/Chat/Chat";
 import InboxPage from "./pages/Inbox/Inbox";
+import EventPage from "./pages/Event/Event";
 
 function App() {
   const router = createBrowserRouter([
@@ -47,6 +48,10 @@ function App() {
           path: '/inbox',
           element: <InboxPage />
         },
+        {
+          path: '/event',
+          element: <EventPage />
+        }
       ]
     }
   ]);
