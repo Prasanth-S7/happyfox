@@ -19,25 +19,89 @@ enum ForumRole {
   ADMIN
 }
 
+enum ProjectTagStatus {
+  PUBLISHED
+  IN_REVIEW
+  DRAFT
+  COMPLETED
+  ONGOING
+}
+
 model User {
-  id         Int             @id @default(autoincrement())
-  username   String          @unique
-  firstName  String
-  lastName   String
-  email      String          @unique
-  password   String
-  role       Role            @default(USER)
-  xp         Int             @default(0)
-  createdAt  DateTime        @default(now())
-  updatedAt  DateTime        @updatedAt
+  id              Int             @id @default(autoincrement())
+  username        String          @unique
+  firstName       String
+  lastName        String
+  email           String          @unique
+  password        String
+  role            Role            @default(USER)
+  xp              Int             @default(0)
+  githubUsername  String?         @unique
+  githubProfileUrl String?
+  githubAvatarUrl String?
+  githubAccessToken String?
+  techStack       String[]        @default([])
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
   
-  // Forum relationships
-  ownedForums Forum[]        @relation("ForumAdmin")
-  memberships ForumMember[]
+  ownedForums     Forum[]         @relation("ForumAdmin")
+  memberships     ForumMember[]
   
-  // Other relationships
-  posts      Post[]
-  chats      Chat[]
+  projects        ProjectUser[]
+  curatedTags     ProjectTag[]
+  
+  posts           Post[]
+  chats           Chat[]
+  votes           Vote[]
+}
+
+model Project {
+  id               String   @id 
+  name             String
+  description      String?
+  problemStatement String?
+  githubUrl        String?  @unique
+  demoUrl          String?
+  techStack        String[]
+  imageUrl         String?
+  status           String
+  projectType      String
+  department       String?
+  club             String?
+  keyFeatures      String[]
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  
+  pendingUsers     PendingProjectUser[]
+  projectImages    ProjectImage[]
+  resources        ProjectResource[]
+  tags             ProjectTag[]
+  users            ProjectUser[]
+  votes            Vote[]
+}
+
+model ProjectUser {
+  id        String  @id @default(uuid())
+  userId    Int
+  projectId String
+  role      String
+  project   Project @relation(fields: [projectId], references: [id])
+  user      User    @relation(fields: [userId], references: [id])
+
+  @@unique([userId, projectId])
+}
+
+model Event {
+  id          String    @id @default(cuid())
+  title       String
+  avatar      String
+  date        String
+  link        String
+  description String
+  category    String
+  poster      String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now())
 }
 
 model Forum {
@@ -48,14 +112,9 @@ model Forum {
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
   
-  // Admin relationship
   adminId     Int
   admin       User          @relation("ForumAdmin", fields: [adminId], references: [id], onDelete: Cascade)
-  
-  // Members relationship
   members     ForumMember[]
-  
-  // Posts in the forum
   posts       Post[]
 }
 
@@ -66,7 +125,6 @@ model ForumMember {
   role      ForumRole @default(MEMBER)
   joinedAt  DateTime  @default(now())
   
-  // Relationships
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   forum     Forum     @relation(fields: [forumId], references: [id], onDelete: Cascade)
 
@@ -85,7 +143,6 @@ model Post {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   
-  // Relationships
   author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   forum       Forum    @relation(fields: [forumId], references: [id], onDelete: Cascade)
 }
@@ -98,35 +155,86 @@ model Chat {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   
-  // Relationship
   author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
 }
 
-// Create relation betweent user and this
+model ProjectTag {
+  id          String            @id @default(uuid())
+  name        String
+  title       String?
+  status      ProjectTagStatus?
+  conference  String?
+  date        DateTime?
+  competition String?
+  projectId   String
+  curatorId   Int
+  createdAt   DateTime         @default(now())
+  curator     User             @relation(fields: [curatorId], references: [id])
+  project     Project          @relation(fields: [projectId], references: [id])
 
-// model Event {
-//   id              String   @id @default(cuid())
-//   title           String
-//   by              String
-//   avatar          String?
-//   date            DateTime
-//   registrationLink String?
-//   description     String   @db.Text
-//   image           String?
-//   category        String[]
-//   display         Int[]
-//   createdAt       DateTime @default(now())
-//   updatedAt       DateTime @updatedAt
-// }
+  @@unique([projectId, name])
+  @@index([curatorId])
+}
 
-model Event {
-  id String @id @default(cuid())
-  title String
-  by String
-  avatar String
-  date String
-  link String
+model PendingProjectUser {
+  id             String  @id @default(uuid())
+  githubUsername String
+  projectId      String
+  role           String
+  project        Project @relation(fields: [projectId], references: [id])
+
+  @@unique([githubUsername, projectId])
+}
+
+model ProjectImage {
+  id          String   @id @default(uuid())
+  title       String
   description String
-  category String
-  poster String
+  url         String
+  projectId   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  project     Project  @relation(fields: [projectId], references: [id])
+
+  @@index([projectId])
+}
+
+model ProjectResource {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  url         String
+  type        String
+  projectId   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  project     Project  @relation(fields: [projectId], references: [id])
+
+  @@index([projectId])
+}
+
+model Vote {
+  id        String   @id @default(cuid())
+  projectId String
+  userEmail String
+  userId    Int
+  createdAt DateTime @default(now())
+  project   Project  @relation(fields: [projectId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@unique([projectId, userEmail])
+  @@unique([projectId, userId])
+}
+
+model VotingStatus {
+  id        String    @id @default("voting_status")
+  isOpen    Boolean   @default(false)
+  startTime DateTime?
+  endTime   DateTime?
+  updatedAt DateTime  @updatedAt
+}
+
+model Counter {
+  id    String @id @default("project_counter")
+  count Int    @default(0)
 }

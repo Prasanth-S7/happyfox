@@ -12,7 +12,7 @@ import router from './routes/router';
 
 const app = express();
 
-app.use(morgan('combined'))
+app.use(morgan('dev'))
 app.use(cors({
     origin: ["http://localhost:5173", "http://172.16.59.133:5173"], 
     credentials: true,
