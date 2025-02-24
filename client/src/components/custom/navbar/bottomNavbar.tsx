@@ -1,5 +1,6 @@
 import { ChatIcon, CommunityIcon, HomeIcon, NotificationIcon, PuzzleIcon } from "@/components/icons/icons"
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { JSX } from "react";
 
 interface NavItems {
     icon: JSX.Element;
@@ -8,6 +9,12 @@ interface NavItems {
 }
 
 const BottomNavbar = () => {
+    
+    const location = useLocation();
+    const pathSegments = location.pathname.split("/"); 
+    console.log(pathSegments);
+    const lastSegment = pathSegments[pathSegments.length - 1];
+    console.log(lastSegment);
     const navItems: NavItems[] = [
         {
             path: '/',
@@ -36,10 +43,10 @@ const BottomNavbar = () => {
         }
     ]
     return(
-        <div className="h-full w-full flex justify-evenly items-center mx-auto">
+        <div className="h-full w-full flex justify-evenly items-center mx-auto font-satoshi">
             {
                 navItems.map((navItem, index) => (
-                    <Link className="flex flex-col items-center" to={navItem.path} key={index}>
+                    <Link className={`flex flex-col items-center font-semibold p-1 rounded-2xl ${lastSegment == navItem.label.toLowerCase() ? 'bg-gray-300' : 'bg-transparent text-black'} hover:bg-primary hover:text-white`} to={navItem.path} key={index}>
                         <div>
                             {navItem.icon}
                         </div>
