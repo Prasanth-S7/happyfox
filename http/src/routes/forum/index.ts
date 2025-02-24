@@ -310,7 +310,11 @@ forumRouter.get("/isAdmin/:id", loginMiddleware, async (req: Request, res: Respo
       }
     });
 
-    res.status(200).json({ isAdmin: isAdmin.admin });
+    if (!isAdmin) {
+      return res.status(400).json({ message: 'Not an admin' });
+    }
+
+    return res.status(200).json({ isAdmin: true });
   } catch (err) {
     console.error('Error getting isAdmin:', err);
     res.status(500).json({ message: 'Failed to get isAdmin' });
