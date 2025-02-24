@@ -47,7 +47,7 @@ const ForumPage = () => {
           <h1 className="text-3xl font-bold tracking-tight">Forums</h1>
           <Button 
             onClick={() => setIsDialogOpen(true)}
-            className="bg-green-500 hover:bg-green-600 text-black font-medium"
+            className="bg-orange-500 hover:bg-orange-700 text-black font-medium"
           >
             <Plus className="mr-2 h-4 w-4" />
             Create Forum

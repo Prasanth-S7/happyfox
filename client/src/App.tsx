@@ -12,6 +12,7 @@ import EventPage from "./pages/Event/Event";
 import AddEventForm from "./pages/Admin/Event/AddEventForm";
 import MainForum from "./pages/MainForum/MainForum";
 import ProtectedRoutes from "./components/custom/misc/ProtectedRoutes";
+import Profile from "./pages/Profile/ProfilePage";
 
 function App() {
   const router = createBrowserRouter([
@@ -58,6 +59,10 @@ function App() {
         {
           path: '/event',
           element: <EventPage />
+        },
+        {
+          path: '/profile',
+          element: <Profile />
         }
       ]
     },
