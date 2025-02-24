@@ -6,7 +6,8 @@ import { decode, sign, verify } from 'jsonwebtoken';
 
 export const userRouter = express.Router();
 
-userRouter.get('/signup', async (req:Request, res:Response) => {
+userRouter.post('/signup', async (req:Request, res:Response) => {
+    console.log(req.body)
     const {username, firstName, lastName, email, password} = req.body;
     try{
 
