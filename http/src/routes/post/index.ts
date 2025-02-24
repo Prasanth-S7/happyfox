@@ -87,7 +87,7 @@ postRouter.get('/:id', async (req: Request, res: Response): Promise<any> => {
 
 postRouter.post('/create', loginMiddleware, async (req: Request, res: Response) => {
   try {
-    const { title, content, forumId } = req.body;
+    const { title, content, forumId, tags, category } = req.body;
 
     if (!title || !content || !forumId) {
       return res.status(400).json({ message: 'Title, content, and forum ID are required' });
@@ -106,7 +106,9 @@ postRouter.post('/create', loginMiddleware, async (req: Request, res: Response) 
         title,
         content,
         forumId,
-        authorId: req.user!.id
+        category,
+        authorId: req.user!.id,
+        tags: tags ? tags.split(',') : [],
       },
       include: {
         author: {
@@ -225,14 +227,19 @@ postRouter.post('/delete', loginMiddleware, async (req: Request, res: Response) 
   }
 });
 
-postRouter.get('/all', async (req: Request, res: Response) => {
+// Get all posts in a forum
+postRouter.get('/all/:id', async (req: Request, res: Response) => {
   try {
     const page = Number(req.query.page) || 1;
     const limit = Number(req.query.limit) || 10;
     const skip = (page - 1) * limit;
+    const id = Number(req.params.id);
 
     const [posts, total] = await Promise.all([
       prisma.post.findMany({
+        where:{
+            forumId: id
+        },
         skip,
         take: limit,
         include: {
