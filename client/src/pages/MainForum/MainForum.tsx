@@ -69,26 +69,6 @@ const MOCK_SESSIONS: Session[] = [
         duration: "1h",
     },
 ];
-const MOCK_RESOURCES: Resource[] = [
-    {
-        id: "1",
-        title: "Complete React Guide PDF",
-        type: "PDF",
-        date: "2024-02-22",
-    },
-    {
-        id: "2",
-        title: "TypeScript Cheat Sheet",
-        type: "Document",
-        date: "2024-02-21",
-    },
-    {
-        id: "3",
-        title: "Frontend Architecture Diagram",
-        type: "Image",
-        date: "2024-02-20",
-    },
-];
 
 export default function MainForum() {
     const { id: forumId } = useParams();
@@ -101,11 +81,13 @@ export default function MainForum() {
     const [activeTab, setActiveTab] = useState("sessions")
     const [sessionsAdded, setSessionAdded] = useState(false);
     const [resourceAdded, setResourceAdded] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(false);
 
     useEffect(() => {
         const fetchPosts = async () => {
             setIsLoading(true);
             const res = await axios.get(`http://localhost:3000/api/v1/post/all/${forumId}`);
+            console.log(res.data);
             setPostsData(res.data);
             setIsLoading(false);
         }
@@ -119,9 +101,20 @@ export default function MainForum() {
             setResourceData(res.data);
         }
 
+        const isAdminOfThisForum = async () => {
+            const res = await axios.get(`http://localhost:3000/api/v1/forum/isAdmin/${forumId}`, {
+                withCredentials: true,
+            });
+            console.log(res.status)
+            if (res.status === 200) {
+                setIsAdmin(true);
+            }
+        }
+
         fetchResources();
         fetchPosts();
         fetchForumDetails()
+        isAdminOfThisForum();
     }, [forumId, postAdded, resourceAdded])
 
     return (
@@ -150,37 +143,44 @@ export default function MainForum() {
                     <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">
                         {forumData?.name || "forum Name"}
                     </h1>
-                    <p className="text-zinc-400">Created by {forumData?.admin?.username || "Admin Username"}</p>
+                    <p className="text-zinc-400 mt-5"><span className="font-bold text-white">Created by </span>{forumData?.admin?.username || "Admin Username"}</p>
+                    <p className="text-zinc-400 mt-5"><span className="font-bold text-white">Description:</span> {forumData?.description || "Admin Username"}</p>
                 </div>
 
                 {/* Tabs Section */}
-                <div className="mt-8">
+                <div className="mt-8 cursor-pointer">
                     <Tabs defaultValue="sessions" className="w-full" onValueChange={(value) => {
                         setActiveTab(value);
                         console.log('hi there')
                     }}>
-                        <TabsList className="w-full bg-zinc-800/50 border border-zinc-700/50">
-                            <TabsTrigger value="sessions" className="w-full">
+                        <TabsList className="w-full bg-zinc-800/50 border border-zinc-700/50 py-6 cursor-pointer z-50 relative">
+                            <TabsTrigger value="sessions" className="w-full py-2 cursor-pointer">
                                 <Play className="mr-2 h-4 w-4" />
                                 Sessions
                             </TabsTrigger>
-                            <TabsTrigger value="posts" className="w-full">
+                            <TabsTrigger value="posts" className="w-full py-2 cursor-pointer">
                                 <MessageSquare className="mr-2 h-4 w-4" />
                                 Posts
                             </TabsTrigger>
-                            <TabsTrigger value="resources" className="w-full">
+                            <TabsTrigger value="resources" className="w-full py-2 cursor-pointer">
                                 <Book className="mr-2 h-4 w-4" />
                                 Resources
                             </TabsTrigger>
                         </TabsList>
                         {
-                            activeTab === "posts" ? (
-                                <CreatePostDialog setPostAdded={setPostAdded} />
-                            ) : activeTab === "resources" ? (
-                                <CreateResourceDialog setResourceAdded={setResourceAdded} />
-                            ) : activeTab === "sessions" ? (
-                                <CreateResourceDialog setResourceAdded={setResourceAdded} />
-                            ) : null
+                            !isAdmin ? (
+                                <div className="text-center py-8">
+                                    <p>You are not authorized to create posts, resources or sessions</p>
+                                </div>
+                            ) : (
+                                activeTab === "posts" ? (
+                                    <CreatePostDialog setPostAdded={setPostAdded} />
+                                ) : activeTab === "resources" ? (
+                                    <CreateResourceDialog setResourceAdded={setResourceAdded} />
+                                ) : activeTab === "sessions" ? (
+                                    <CreateResourceDialog setResourceAdded={setResourceAdded} />
+                                ) : null
+                            )
                         }
                         <ScrollArea className="h-[600px] w-full rounded-md border border-zinc-700/50 mt-4">
                             <TabsContent value="sessions" className="p-4 space-y-4">

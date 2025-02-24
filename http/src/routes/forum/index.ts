@@ -13,6 +13,7 @@ interface AuthRequest extends Request {
 
 export const forumRouter = express.Router();
 
+// Get all forums with optional pagination
 forumRouter.get('/all', async (req: Request, res: Response) => {
   try {
     const page = Number(req.query.page) || 1;
@@ -52,6 +53,7 @@ forumRouter.get('/all', async (req: Request, res: Response) => {
   }
 });
 
+// Get single forum with details
 forumRouter.get('/:id', async (req: Request, res: Response): Promise<any> => {
   try {
     const id = Number(req.params.id);
@@ -108,6 +110,7 @@ forumRouter.post('/create', loginMiddleware, async (req: AuthRequest, res: Respo
       return res.status(400).json({ message: 'Name and description are required' });
     }
 
+    // Check if forum name already exists
     const existingForum = await prisma.forum.findFirst({
       where: { name }
     });
@@ -139,6 +142,7 @@ forumRouter.post('/create', loginMiddleware, async (req: AuthRequest, res: Respo
   }
 });
 
+// Update forum
 forumRouter.put('/:id', loginMiddleware, async (req: AuthRequest, res: Response): Promise<any> => {
   try {
     const id = Number(req.params.id);
@@ -152,6 +156,7 @@ forumRouter.put('/:id', loginMiddleware, async (req: AuthRequest, res: Response)
       return res.status(400).json({ message: 'Nothing to update' });
     }
 
+    // Check if user is admin of the forum or has ADMIN role
     const forum = await prisma.forum.findUnique({
       where: { id }
     });
@@ -164,6 +169,7 @@ forumRouter.put('/:id', loginMiddleware, async (req: AuthRequest, res: Response)
       return res.status(403).json({ message: 'Not authorized to update this forum' });
     }
 
+    // If name is being updated, check for duplicates
     if (name && name !== forum.name) {
       const existingForum = await prisma.forum.findFirst({
         where: { name }
@@ -205,6 +211,7 @@ forumRouter.post('/join/:id', loginMiddleware, async (req: AuthRequest, res: Res
       return res.status(400).json({ message: 'Invalid forum ID' });
     }
 
+    // Check if user is admin of the forum or has ADMIN role
     const forum = await prisma.forum.findUnique({
       where: { id }
     });
@@ -256,6 +263,7 @@ forumRouter.post('/join/:id', loginMiddleware, async (req: AuthRequest, res: Res
   }
 });
 
+// Delete forum
 forumRouter.delete('/:id', loginMiddleware, async (req: AuthRequest, res: Response) => {
   try {
     const id = Number(req.params.id);
@@ -264,6 +272,7 @@ forumRouter.delete('/:id', loginMiddleware, async (req: AuthRequest, res: Respon
       return res.status(400).json({ message: 'Invalid forum ID' });
     }
 
+    // Check if user is admin of the forum or has ADMIN role
     const forum = await prisma.forum.findUnique({
       where: { id }
     });
@@ -284,5 +293,26 @@ forumRouter.delete('/:id', loginMiddleware, async (req: AuthRequest, res: Respon
   } catch (err) {
     console.error('Error deleting forum:', err);
     res.status(500).json({ message: 'Failed to delete forum' });
+  }
+});
+
+forumRouter.get("/isAdmin/:id", loginMiddleware, async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const userId = req.user.id;
+  try {
+    const isAdmin = await prisma.forum.findUnique({
+      where: { 
+        id: Number(id),
+        adminId: userId  
+      },
+      select: {
+        admin: true
+      }
+    });
+
+    res.status(200).json({ isAdmin: isAdmin.admin });
+  } catch (err) {
+    console.error('Error getting isAdmin:', err);
+    res.status(500).json({ message: 'Failed to get isAdmin' });
   }
 });

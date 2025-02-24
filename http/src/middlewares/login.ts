@@ -43,10 +43,14 @@ export const loginMiddleware = async (
       return res.status(401).json({ message: 'Authentication token missing' });
     }
 
+    console.log(token)
+
     const decoded = verify(
       token,
       process.env.JWT_SECRET as string
     ) as JwtCustomPayload;
+
+    console.log(decoded);
 
 
     const user = await prisma.user.findUnique({

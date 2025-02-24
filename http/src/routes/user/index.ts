@@ -1,11 +1,14 @@
+//@ts-nocheck
 import express from "express";
 import { Request, Response } from "express";
 import prisma from "../../prismaClient";
 import { sign } from "jsonwebtoken";
 import bcrypt from "bcryptjs";
+import { loginMiddleware } from "../../middlewares/login";
 
 export const userRouter = express.Router();
 
+// Input validation helper
 function validateInput(data: any) {
   const { username, firstName, lastName, email, password } = data;
   if (!email?.includes('@') || !password || password.length < 6) {
@@ -14,6 +17,7 @@ function validateInput(data: any) {
   return true;
 }
 
+// Signup route
 userRouter.post("/signup", async (req: Request, res: Response): Promise<any> => {
   try {
     const { username, firstName, lastName, email, password } = req.body;
@@ -22,6 +26,7 @@ userRouter.post("/signup", async (req: Request, res: Response): Promise<any> => 
       return res.status(400).json({ message: "Invalid input data" });
     }
 
+    // Check if user exists (both username and email)
     const existingUser = await prisma.user.findFirst({
       where: {
         OR: [
@@ -32,13 +37,14 @@ userRouter.post("/signup", async (req: Request, res: Response): Promise<any> => 
     });
 
     if (existingUser) {
-      return res.status(403).json({
-        message: existingUser.username === username
-          ? "Username already exists"
-          : "Email already exists"
+      return res.status(403).json({ 
+        message: existingUser.username === username 
+          ? "Username already exists" 
+          : "Email already exists" 
       });
     }
 
+    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await prisma.user.create({
@@ -64,16 +70,16 @@ userRouter.post("/signup", async (req: Request, res: Response): Promise<any> => 
     });
 
     const token = sign(
-      { id: user.id },
+      { id: user.id }, 
       process.env.JWT_SECRET as string,
       { expiresIn: '24h' }
     );
 
     res.cookie("token", `${token}`, {
-      httpOnly: false,
+      httpOnly: false,  // Important for security
       secure: false,
       sameSite: "lax",
-      maxAge: 24 * 60 * 60 * 1000
+      maxAge: 24 * 60 * 60 * 1000 // 24 hours
     });
 
     res.status(201).json({ user, token });
@@ -83,9 +89,11 @@ userRouter.post("/signup", async (req: Request, res: Response): Promise<any> => 
   }
 });
 
+// Login route
 userRouter.post("/login", async (req: Request, res: Response): Promise<any> => {
   try {
     const { email, password } = req.body;
+    console.log(email, password);
 
     if (!email || !password) {
       return res.status(400).json({ message: "Email and password are required" });
@@ -117,7 +125,7 @@ userRouter.post("/login", async (req: Request, res: Response): Promise<any> => {
 
     const { password: _, ...userWithoutPassword } = user;
     const token = sign(
-      { id: user.id },
+      { id: user.id }, 
       process.env.JWT_SECRET as string,
       { expiresIn: '24h' }
     );
@@ -136,6 +144,7 @@ userRouter.post("/login", async (req: Request, res: Response): Promise<any> => {
   }
 });
 
+// Logout route
 userRouter.post("/logout", (_req: Request, res: Response) => {
   try {
     res.cookie("token", "", {
@@ -151,3 +160,7 @@ userRouter.post("/logout", (_req: Request, res: Response) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
+
+userRouter.get("/self", loginMiddleware, (req: Request, res: Response) => {
+  return res.status(200).json(req.user); 
+})
