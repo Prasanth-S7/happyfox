@@ -14,8 +14,8 @@ import router from './routes/router';
 
 const app = express();
 
-const privateKey = fs.readFileSync('../ssl/server.key', 'utf8');
-const certificate = fs.readFileSync('../ssl/server.crt', 'utf8');  
+const privateKey = fs.readFileSync('./ssl/server.key', 'utf8');
+const certificate = fs.readFileSync('./ssl/server.crt', 'utf8');  
 const credentials = { key: privateKey, cert: certificate };
 
 app.use(morgan('dev'));
