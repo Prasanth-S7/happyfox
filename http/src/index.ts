@@ -14,7 +14,7 @@ const app = express();
 
 app.use(morgan('dev'))
 app.use(cors({
-    origin: ["http://localhost:5173", "http://172.16.59.133:5173"], 
+    origin: ["http://localhost:5173", "http://172.16.59.133:5173", "https://arize.pages.dev"], 
     credentials: true,
 }));
 app.use(express.json());

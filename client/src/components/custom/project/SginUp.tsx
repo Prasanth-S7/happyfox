@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { BACKEND_URL } from "@/config/config";
 
 const ProjectsSignUp = () => {
     const [githubUsername, setGithubUsername] = useState("");
@@ -24,7 +25,7 @@ const ProjectsSignUp = () => {
         setError("");
 
         try {
-            await axios.patch('http://localhost:3000/api/v1/user', { githubUsername }, {
+            await axios.patch(BACKEND_URL+'/api/v1/user', { githubUsername }, {
                 headers: {
                     'Authorization': `Bearer ${Cookies.get('token')}`
                 }

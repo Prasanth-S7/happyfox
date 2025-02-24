@@ -1,0 +1,1 @@
+export const BACKEND_URL = import.meta.env.MODE === "development" ? "http://localhost:3000" : "http://13.49.74.101:3000";

@@ -13,6 +13,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import axios from "axios";
 import { useEffect } from "react";
+import { BACKEND_URL } from "@/config/config";
 
 interface CreateForumDialogProps {
   open: boolean;
@@ -24,7 +25,7 @@ export function CreateForumDialog({ open, onOpenChange, setForumsAdded }: Create
   const [description, setDescription] = useState("");
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const res = await axios.post("http://localhost:3000/api/v1/forum/create", {
+    const res = await axios.post(BACKEND_URL+"/api/v1/forum/create", {
       name: title,
       description: description
     }, {

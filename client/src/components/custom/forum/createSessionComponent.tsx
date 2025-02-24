@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Plus } from "lucide-react";
 import { toast } from "sonner";
 import axios from "axios";
+import { BACKEND_URL } from "@/config/config";
 
 export function CreateSessionComponent({ setSessionAdded, forumId }: { setSessionAdded: any, forumId: string | number | undefined }) {
   const [title, setTitle] = useState("");
@@ -20,7 +21,7 @@ export function CreateSessionComponent({ setSessionAdded, forumId }: { setSessio
     setIsSubmitting(true);
 
     try {
-      const response = await axios.post("http://localhost:3000/api/v1/session/create", {
+      const response = await axios.post(BACKEND_URL + "/api/v1/session/create", {
         title,
         description,
         category,

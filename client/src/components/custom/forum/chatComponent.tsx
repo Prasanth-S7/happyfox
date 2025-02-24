@@ -4,6 +4,7 @@ import { Heart, Send } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { BACKEND_URL } from "@/config/config";
 
 interface ChatMessage {
   id: number;
@@ -34,7 +35,7 @@ export function ChatComponent({ forumId }: ChatComponentProps) {
   const fetchChatMessages = async () => {
     setIsLoading(true);
     try {
-      const res = await axios.get(`http://localhost:3000/api/v1/chat/all/${forumId}`);
+      const res = await axios.get(`${BACKEND_URL}/api/v1/chat/all/${forumId}`);
       setChatMessages(res.data);
       
       setTimeout(() => {
@@ -69,7 +70,7 @@ export function ChatComponent({ forumId }: ChatComponentProps) {
 
   const fetchCurrentUser = async () => {
     try {
-      const res = await axios.get('http://localhost:3000/api/v1/user/self', {
+      const res = await axios.get(BACKEND_URL+'/api/v1/user/self', {
         withCredentials: true,
       });
       
@@ -94,7 +95,7 @@ export function ChatComponent({ forumId }: ChatComponentProps) {
   const toggleLike = async (messageId: number) => {
     try {
       if (likedMessages[messageId]) {
-        await axios.delete(`http://localhost:3000/api/v1/chat/${messageId}/like`, {
+        await axios.delete(`${BACKEND_URL}/api/v1/chat/${messageId}/like`, {
           withCredentials: true,
         });
         
@@ -109,7 +110,7 @@ export function ChatComponent({ forumId }: ChatComponentProps) {
           )
         );
       } else {
-        await axios.post(`http://localhost:3000/api/v1/chat/${messageId}/like`, {}, {
+        await axios.post(`${BACKEND_URL}/api/v1/chat/${messageId}/like`, {}, {
           withCredentials: true,
         });
         
@@ -135,7 +136,7 @@ export function ChatComponent({ forumId }: ChatComponentProps) {
     
     try {
       const res = await axios.post(
-        `http://localhost:3000/api/v1/chat/create`, 
+        `${BACKEND_URL}/api/v1/chat/create`, 
         {
           message: newMessage,
           forumId: forumId

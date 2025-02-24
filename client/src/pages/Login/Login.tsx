@@ -6,6 +6,7 @@ import { User, Mail, Lock, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { BACKEND_URL } from "@/config/config";
 
 const cardContent = {
   title: "Welcome Back",
@@ -25,7 +26,7 @@ const CardBody = ({ className = "p-4" }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log(formData);
-    const res = await axios.post('http://localhost:3000/api/v1/user/login', formData, {
+    const res = await axios.post(BACKEND_URL+'/api/v1/user/login', formData, {
         withCredentials: true,
         headers:{
             'content-type': 'application/json'

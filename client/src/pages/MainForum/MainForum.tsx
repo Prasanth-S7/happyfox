@@ -10,6 +10,7 @@ import { CreatePostDialog } from "@/components/custom/forum/createPostDialog"
 import { CreateResourceDialog } from "@/components/custom/forum/createResourceDialog"
 import ChatComponent from "@/components/custom/forum/chatComponent"
 import { CreateSessionComponent } from "@/components/custom/forum/createSessionComponent"
+import { BACKEND_URL } from "@/config/config"
 
 interface Post {
     id: number
@@ -96,28 +97,28 @@ export default function MainForum() {
     useEffect(() => {
         const fetchPosts = async () => {
             setIsLoading(true)
-            const res = await axios.get(`http://localhost:3000/api/v1/post/all/${forumId}`)
+            const res = await axios.get(`${BACKEND_URL}/api/v1/post/all/${forumId}`)
             setPostsData(res.data)
             setIsLoading(false)
         }
 
         const fetchForumDetails = async () => {
-            const res = await axios.get(`http://localhost:3000/api/v1/forum/${forumId}`)
+            const res = await axios.get(`${BACKEND_URL}/api/v1/forum/${forumId}`)
             setForumData(res.data)
         }
 
         const fetchResources = async () => {
-            const res = await axios.get(`http://localhost:3000/api/v1/resource/all/${forumId}`)
+            const res = await axios.get(`${BACKEND_URL}/api/v1/resource/all/${forumId}`)
             setResourceData(res.data)
         }
 
         const fetchSessions = async () => {
-            const res = await axios.get(`http://localhost:3000/api/v1/session/all/${forumId}`)
+            const res = await axios.get(`${BACKEND_URL}/api/v1/session/all/${forumId}`)
             setSessionsData(res.data)
         }
 
         const isAdminOfThisForum = async () => {
-            const res = await axios.get(`http://localhost:3000/api/v1/forum/isAdmin/${forumId}`, {
+            const res = await axios.get(`${BACKEND_URL}/api/v1/forum/isAdmin/${forumId}`, {
                 withCredentials: true,
             })
             if (res.status === 200) {
@@ -138,7 +139,7 @@ export default function MainForum() {
             setLikedPosts((prev) => ({ ...prev, [postId]: newLikedState }))
 
             const endpoint = newLikedState ? "upvote" : "downvote"
-            await axios.post(`http://localhost:3000/api/v1/post/${endpoint}`, { id: postId }, { withCredentials: true })
+            await axios.post(`${BACKEND_URL}/api/v1/post/${endpoint}`, { id: postId }, { withCredentials: true })
 
             if (postsData) {
                 setPostsData({
@@ -261,7 +262,7 @@ export default function MainForum() {
                                             >
                                                 <div className="aspect-square w-full relative">
                                                     <img
-                                                        src={`http://localhost:3000${post.imageUrl}`}
+                                                        src={`${BACKEND_URL}${post.imageUrl}`}
                                                         alt={post.title}
                                                         className="object-cover w-full h-full"
                                                     />
@@ -308,7 +309,7 @@ export default function MainForum() {
                                             <span className="text-sm text-purple-400 font-medium">{resource.type}</span>
                                         </div>
                                         <a
-                                            href={`http://localhost:3000${resource.resourceUrl}`}
+                                            href={`${BACKEND_URL}${resource.resourceUrl}`}
                                             download={resource.title}
                                             className="mt-4 inline-block bg-gradient-to-r bg-orange-500 text-white py-2 px-4 rounded-lg hover:bg-orange-600"
                                         >
