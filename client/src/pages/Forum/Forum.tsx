@@ -23,6 +23,7 @@ interface Forum {
 const ForumPage = () => {
   const [forums, setForums] = useState<Forum[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [forumsAdded, setForumsAdded] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -36,7 +37,7 @@ const ForumPage = () => {
     };
 
     getForums();
-  }, []); 
+  }, [forumsAdded]); 
 
 
   return (
@@ -46,7 +47,7 @@ const ForumPage = () => {
           <h1 className="text-3xl font-bold tracking-tight">Forums</h1>
           <Button 
             onClick={() => setIsDialogOpen(true)}
-            className="bg-green-500 hover:bg-green-600 text-black font-medium"
+            className="bg-orange-500 hover:bg-orange-700 text-black font-medium"
           >
             <Plus className="mr-2 h-4 w-4" />
             Create Forum
@@ -67,7 +68,7 @@ const ForumPage = () => {
                     {forum.name}
                   </h3>
                   <p className="text-zinc-400 text-sm">{forum.description}</p>
-                  <p className="text-sm text-zinc-500">
+                  <p className="text-sm text-zinc-500 mt-5">
                     Created by: <span className="text-white">{forum.admin.username}</span>
                   </p>
                 </div>
@@ -83,6 +84,7 @@ const ForumPage = () => {
         <CreateForumDialog 
           open={isDialogOpen} 
           onOpenChange={setIsDialogOpen}
+          setForumsAdded = {setForumsAdded}
         />
       </div>
     </div>

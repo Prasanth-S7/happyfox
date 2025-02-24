@@ -28,30 +28,28 @@ enum ProjectTagStatus {
 }
 
 model User {
-  id              Int             @id @default(autoincrement())
-  username        String          @unique
-  firstName       String
-  lastName        String
-  email           String          @unique
-  password        String
-  role            Role            @default(USER)
-  xp              Int             @default(0)
+  id         Int             @id @default(autoincrement())
+  username   String          @unique
+  firstName  String
+  lastName   String
+  email      String          @unique
+  password   String
+  role       Role            @default(USER)
+  xp         Int             @default(0)
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
+  ownedForums Forum[]        @relation("ForumAdmin")
+  memberships ForumMember[]
+  posts      Post[]
+  chats      Chat[]
+  resources  Resource[]
   githubUsername  String?         @unique
   githubProfileUrl String?
   githubAvatarUrl String?
   githubAccessToken String?
   techStack       String[]        @default([])
-  createdAt       DateTime        @default(now())
-  updatedAt       DateTime        @updatedAt
-  
-  ownedForums     Forum[]         @relation("ForumAdmin")
-  memberships     ForumMember[]
-  
   projects        ProjectUser[]
   curatedTags     ProjectTag[]
-  
-  posts           Post[]
-  chats           Chat[]
   votes           Vote[]
 }
 
@@ -111,11 +109,11 @@ model Forum {
   isPrivate   Boolean       @default(false)
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
-  
   adminId     Int
   admin       User          @relation("ForumAdmin", fields: [adminId], references: [id], onDelete: Cascade)
   members     ForumMember[]
   posts       Post[]
+  resources   Resource[]
 }
 
 model ForumMember {
@@ -123,8 +121,7 @@ model ForumMember {
   userId    Int
   forumId   Int
   role      ForumRole @default(MEMBER)
-  joinedAt  DateTime  @default(now())
-  
+  joinedAt  DateTime  @default(now())  
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   forum     Forum     @relation(fields: [forumId], references: [id], onDelete: Cascade)
 
@@ -142,8 +139,7 @@ model Post {
   forumId     Int
   category    String?
   createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
+  updatedAt   DateTime @updatedAt  
   author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   forum       Forum    @relation(fields: [forumId], references: [id], onDelete: Cascade)
 }
@@ -159,6 +155,19 @@ model Chat {
   author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
 }
 
+model Resource {
+  id          Int       @id @default(autoincrement())
+  title       String
+  description String
+  type        String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  resourceUrl String
+  authorId    Int  
+  forumId     Int
+  forum       Forum     @relation(fields: [forumId], references: [id], onDelete: Cascade)
+  author      User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+}
 model ProjectTag {
   id          String            @id @default(uuid())
   name        String

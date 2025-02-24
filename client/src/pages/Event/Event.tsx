@@ -22,63 +22,67 @@ const EventPage = () => {
     const fetchEvents = async () => {
         try {
             const res = await axios.get('http://localhost:3000/api/v1/event/events');
-            if(res.status === 200) {
+            if (res.status === 200) {
                 const data = res.data.data;
                 setEvents(data);
             }
         } catch (error) {
             console.error(error);
         }
-    }
+    };
 
     useEffect(() => {
         fetchEvents();
     }, []);
 
     const getFilteredEvents = () => {
-        const filtered = selectedCategory === 'all' 
-            ? events 
+        const filtered = selectedCategory === 'all'
+            ? events
             : events.filter(event => event.category === selectedCategory);
 
-        return [...filtered].sort((a, b) => 
+        return [...filtered].sort((a, b) =>
             new Date(b.date).getTime() - new Date(a.date).getTime()
         );
-    }
+    };
 
-    return(
-        <div className="p-4">
-            <div className="flex flex-wrap gap-2 mb-6">
-                {filterOptions.map(({ id, name }) => (
-                    <button
-                        key={id}
-                        onClick={() => setSelectedCategory(id)}
-                        className={`px-4 py-2 rounded-full transition-colors ${
-                            selectedCategory === id
-                                ? 'bg-orange-500 text-primary-foreground'
-                                : 'bg-muted text-muted-foreground hover:bg-accent'
-                        }`}
-                    >
-                        {name}
-                    </button>
-                ))}
+    return (
+        <div className="p-4 bg-black" style={{ minHeight: 'calc(100vh - 115px)' }}>
+            {/* Category Slider */}
+            <div className="mb-6">
+                <div className="flex overflow-x-auto gap-2 pb-2 snap-x snap-mandatory scrollbar-hide">
+                    {filterOptions.map(({ id, name }) => (
+                        <button
+                            key={id}
+                            onClick={() => setSelectedCategory(id)}
+                            className={`flex-shrink-0 px-4 py-2 rounded-full transition-colors snap-center ${
+                                selectedCategory === id
+                                    ? 'bg-orange-500 text-white font-semibold'
+                                    : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                            }`}
+                        >
+                            {name}
+                        </button>
+                    ))}
+                </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {/* Event Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 bg-black">
                 {getFilteredEvents().map(event => (
-                    <EventCard 
-                        key={event.id} 
-                        event={event} 
+                    <EventCard
+                        key={event.id}
+                        event={event}
                     />
                 ))}
             </div>
 
             {getFilteredEvents().length === 0 && (
-                <div className="text-center text-muted-foreground py-12">
+                <div className="text-center text-gray-400 py-12">
                     No events found in this category
                 </div>
             )}
         </div>
-    )
-}
+    );
+};
 
 export default EventPage;

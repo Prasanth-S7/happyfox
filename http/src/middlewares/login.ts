@@ -35,18 +35,22 @@ export const loginMiddleware = async (
 
     if (authHeader?.startsWith('Bearer ')) {
       token = authHeader.substring(7);
-    } else if (cookieToken?.startsWith('Bearer ')) {
-      token = cookieToken.substring(7);
+    } else if (cookieToken?.length > 0) {
+      token = cookieToken
     }
 
     if (!token) {
       return res.status(401).json({ message: 'Authentication token missing' });
     }
 
+    console.log(token)
+
     const decoded = verify(
       token,
       process.env.JWT_SECRET as string
     ) as JwtCustomPayload;
+
+    console.log(decoded);
 
 
     const user = await prisma.user.findUnique({

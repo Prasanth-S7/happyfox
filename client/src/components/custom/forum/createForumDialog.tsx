@@ -11,20 +11,42 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 import { toast } from "sonner";
+import axios from "axios";
+import { useEffect } from "react";
+
 interface CreateForumDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  setForumsAdded: any;
 }
-export function CreateForumDialog({ open, onOpenChange }: CreateForumDialogProps) {
+export function CreateForumDialog({ open, onOpenChange, setForumsAdded }: CreateForumDialogProps) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success("Forum created successfully");
+    const res = await axios.post("http://localhost:3000/api/v1/forum/create", {
+      name: title,
+      description: description
+    }, {
+      withCredentials: true
+    })
+
+    if (res.status === 201) {
+      console.log(res.data)
+      setForumsAdded((prev: any) => !prev);
+      toast.success("Forum created successfully");
+    }
+    else{
+      toast.error("Forum can't be created due to some error")
+    }
     setTitle("");
     setDescription("");
     onOpenChange(false);
   };
+
+  useEffect(() => {
+
+  })
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px] bg-zinc-900 text-white border-zinc-800">
@@ -64,7 +86,7 @@ export function CreateForumDialog({ open, onOpenChange }: CreateForumDialogProps
           <DialogFooter>
             <Button
               type="submit"
-              className="bg-green-500 hover:bg-green-600 text-black font-medium"
+              className="bg-orange-500 hover:bg-orange-700 text-black font-medium"
             >
               Create Forum
             </Button>
