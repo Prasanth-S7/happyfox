@@ -54,7 +54,7 @@ const BottomNavbar = () => {
                         <Link 
                             className={`flex flex-col transition-all duration-200 items-center font-semibold p-1 rounded-2xl ${
                                 isActive ? 'text-orange-500' : 'bg-transparent text-black'
-                            } hover:bg-slate-50 h-[50px] w-[50px] drop-shadow-none`} 
+                            } hover:bg-slate-50 h-[50px] w-[50px] drop-shadow-none hover:drop-shadow-none`} 
                             to={navItem.path} 
                             key={index}
                         >

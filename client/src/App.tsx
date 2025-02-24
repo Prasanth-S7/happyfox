@@ -9,6 +9,7 @@ import ProjectPage from "./pages/Project/Project";
 import ChatPage from "./pages/Chat/Chat";
 import InboxPage from "./pages/Inbox/Inbox";
 import EventPage from "./pages/Event/Event";
+import AddEventForm from "./pages/Admin/Event/AddEventForm";
 
 function App() {
   const router = createBrowserRouter([
@@ -53,6 +54,10 @@ function App() {
           element: <EventPage />
         }
       ]
+    },
+    {
+      path: '/admin/event',
+      element: <AddEventForm />
     }
   ]);
   
