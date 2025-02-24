@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { User, Mail, Lock, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios'
 
 const cardContent = {
@@ -21,11 +21,14 @@ const CardBody = ({ className = "p-4" }) => {
     password: "",
   });
 
+  const navigate = useNavigate();
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const res = await axios.post('http://localhost:3000/api/v1/user/signup', formData);
     if(res.status === 200){
       toast.success("Sign Up successfull");
+      navigate("/")
     }
     else{
         toast.error("Sign Up failed");

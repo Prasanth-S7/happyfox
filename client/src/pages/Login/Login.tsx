@@ -4,6 +4,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { User, Mail, Lock, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const cardContent = {
   title: "Welcome Back",
@@ -18,10 +20,27 @@ const CardBody = ({ className = "p-4" }) => {
     email: "",
     password: "",
   });
+  const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast.message("Login attempt");
+    console.log(formData);
+    const res = await axios.post('http://localhost:3000/api/v1/user/login', formData, {
+        withCredentials: true,
+        headers:{
+            'content-type': 'application/json'
+        }
+    });
+    if(res.status === 200){
+      toast.success("Login successfull");
+      navigate("/")
+    }
+    else if(res.status === 400){
+        toast.error("Invalid username or password")
+    }
+    else{
+        toast.error("Login failed");
+    }
   };
 
   const inputClasses = "bg-zinc-800/50 border-zinc-700 text-white placeholder:text-zinc-400 focus:ring-green-400/20 focus:border-green-400/20";

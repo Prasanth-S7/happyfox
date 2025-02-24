@@ -13,31 +13,64 @@ enum Role {
   ADMIN
 }
 
+enum ForumRole {
+  MEMBER
+  MODERATOR
+  ADMIN
+}
+
 model User {
-  id         Int      @id @default(autoincrement())
-  username   String   @unique
+  id         Int             @id @default(autoincrement())
+  username   String          @unique
   firstName  String
   lastName   String
-  email      String   @unique
+  email      String          @unique
   password   String
-  role       Role     @default(USER)
-  xp         Int      @default(0)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  forums     Forum[]
+  role       Role            @default(USER)
+  xp         Int             @default(0)
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
+  
+  // Forum relationships
+  ownedForums Forum[]        @relation("ForumAdmin")
+  memberships ForumMember[]
+  
+  // Other relationships
   posts      Post[]
   chats      Chat[]
 }
 
 model Forum {
-  id          Int      @id @default(autoincrement())
-  name        String   @unique
+  id          Int           @id @default(autoincrement())
+  name        String        @unique
   description String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  isPrivate   Boolean       @default(false)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  
+  // Admin relationship
   adminId     Int
-  admin       User     @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  admin       User          @relation("ForumAdmin", fields: [adminId], references: [id], onDelete: Cascade)
+  
+  // Members relationship
+  members     ForumMember[]
+  
+  // Posts in the forum
   posts       Post[]
+}
+
+model ForumMember {
+  id        Int       @id @default(autoincrement())
+  userId    Int
+  forumId   Int
+  role      ForumRole @default(MEMBER)
+  joinedAt  DateTime  @default(now())
+  
+  // Relationships
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  forum     Forum     @relation(fields: [forumId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, forumId])
 }
 
 model Post {
@@ -51,6 +84,8 @@ model Post {
   forumId     Int
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  
+  // Relationships
   author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   forum       Forum    @relation(fields: [forumId], references: [id], onDelete: Cascade)
 }
@@ -62,5 +97,7 @@ model Chat {
   authorId  Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  
+  // Relationship
   author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
 }
