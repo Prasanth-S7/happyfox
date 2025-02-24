@@ -10,6 +10,7 @@ import ChatPage from "./pages/Chat/Chat";
 import InboxPage from "./pages/Inbox/Inbox";
 import EventPage from "./pages/Event/Event";
 import AddEventForm from "./pages/Admin/Event/AddEventForm";
+import MainForum from "./pages/MainForum/MainForum";
 
 function App() {
   const router = createBrowserRouter([
@@ -36,6 +37,10 @@ function App() {
         {
           path: '/forum',
           element: <ForumPage />
+        },
+        {
+          path: '/forum/:id',
+          element: <MainForum />
         },
         {
           path: '/project',

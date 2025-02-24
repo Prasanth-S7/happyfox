@@ -1,6 +1,8 @@
+//@ts-nocheck
 import express from 'express';
 import { Request, Response } from 'express';
 import prisma from '../../prismaClient';
+import { loginMiddleware } from '../../middlewares/login';
 
 export const chatRouter = express.Router();
 
@@ -29,13 +31,14 @@ chatRouter.get('/:id', async (req:Request, res:Response) => {
     }
 });
 
-chatRouter.post('/create', async (req:Request, res:Response) => {
+chatRouter.post('/create', loginMiddleware, async (req:Request, res:Response) => {
     const {message, authorId} = req.body;
     try{
         const chat = await prisma.chat.create({
             data: {
                 message,
-                authorId
+                //@ts-ignore
+                authorId: req.user.id
             },
         });
         res.status(200).json(chat);
@@ -45,7 +48,7 @@ chatRouter.post('/create', async (req:Request, res:Response) => {
     }
 });
 
-chatRouter.post('/update', async (req:Request, res:Response) => {
+chatRouter.post('/update', loginMiddleware, async (req:Request, res:Response) => {
     const {id, message, authorId} = req.body;
     try{
         const chat = await prisma.chat.update({
@@ -54,7 +57,8 @@ chatRouter.post('/update', async (req:Request, res:Response) => {
             },
             data: {
                 message,
-                authorId
+                //@ts-ignore
+                authorId: req.user.id,
             },
         });
         res.status(200).json(chat);
@@ -64,7 +68,7 @@ chatRouter.post('/update', async (req:Request, res:Response) => {
     }
 });
 
-chatRouter.post('/delete', async (req:Request, res:Response) => {
+chatRouter.post('/delete', loginMiddleware, async (req:Request, res:Response) => {
     const {id} = req.body;
     try{
         const chat = await prisma.chat.delete({
