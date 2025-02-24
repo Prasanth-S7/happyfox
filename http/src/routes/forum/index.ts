@@ -1,6 +1,7 @@
 import express from 'express';
 import { Request, Response } from 'express';
 import prisma from '../../prismaClient';
+import { loginMiddleware } from '../../middlewares/login';
 
 export const forumRouter = express.Router();
 
@@ -29,14 +30,15 @@ forumRouter.get('/:id', async (req:Request, res:Response) => {
     }
 });
 
-forumRouter.post('/create', async (req:Request, res:Response) => {
-    const {name, description, adminId} = req.body;
+forumRouter.post('/create', loginMiddleware,  async (req:Request, res:Response) => { 
+    const {name, description} = req.body;
     try{
         const forum = await prisma.forum.create({
             data: {
                 name,
                 description,
-                adminId
+                //@ts-ignore
+                adminId: req.user.id
             },
         });
         res.status(200).json(forum);
@@ -61,10 +63,6 @@ forumRouter.post('/update', async (req:Request, res:Response) => {
             return;
         }
 
-        if(isAdmin.role !== 'ADMIN'){
-            res.status(403).json({message: 'You are not authorized to perform this action'});
-        }
-        
         const forum = await prisma.forum.update({
             where: {
                 id,
