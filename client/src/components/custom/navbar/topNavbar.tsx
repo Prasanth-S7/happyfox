@@ -39,12 +39,12 @@ const TopNavbar = () => {
     };
 
     return (
-        <div className="h-full w-full grid grid-cols-[50px_auto_50px] items-center">
+        <div className="h-full w-full grid grid-cols-[50px_auto_50px] items-center bg-black border-b border-white/20">
             <div>
                 <Sidebar />
             </div>
             <div className="flex items-center">
-                <p className="ml-2 text-xl font-bold">Campus <span className="text-orange-500">{getCurrentLabel()}</span></p>
+                <p className="ml-2 text-xl font-bold text-white">Campus <span className="text-orange-500">{getCurrentLabel()}</span></p>
             </div>
             <div className="flex items-center space-x-2 justify-end">
                 <Link to={'/inbox'}>

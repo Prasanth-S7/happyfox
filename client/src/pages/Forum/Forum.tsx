@@ -23,6 +23,7 @@ interface Forum {
 const ForumPage = () => {
   const [forums, setForums] = useState<Forum[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [forumsAdded, setForumsAdded] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -36,7 +37,7 @@ const ForumPage = () => {
     };
 
     getForums();
-  }, []); 
+  }, [forumsAdded]); 
 
 
   return (
@@ -83,6 +84,7 @@ const ForumPage = () => {
         <CreateForumDialog 
           open={isDialogOpen} 
           onOpenChange={setIsDialogOpen}
+          setForumsAdded = {setForumsAdded}
         />
       </div>
     </div>

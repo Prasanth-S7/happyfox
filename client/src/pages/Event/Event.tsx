@@ -46,7 +46,7 @@ const EventPage = () => {
     }
 
     return(
-        <div className="p-4">
+        <div className="p-4 bg-black" style={{ minHeight: 'calc(100vh - 115px)' }}>
             <div className="flex flex-wrap gap-2 mb-6">
                 {filterOptions.map(({ id, name }) => (
                     <button
@@ -63,7 +63,7 @@ const EventPage = () => {
                 ))}
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 bg-black">
                 {getFilteredEvents().map(event => (
                     <EventCard 
                         key={event.id} 

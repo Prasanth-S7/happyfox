@@ -3,6 +3,7 @@ import express from 'express';
 import { Request, Response } from 'express';
 import prisma from '../../prismaClient';
 import { loginMiddleware } from '../../middlewares/login';
+import { upload } from '../../controllers/eventController';
 
 export const postRouter = express.Router();
 
@@ -85,53 +86,42 @@ postRouter.get('/:id', async (req: Request, res: Response): Promise<any> => {
   }
 });
 
-postRouter.post('/create', loginMiddleware, async (req: Request, res: Response) => {
-  try {
-    const { title, content, forumId, tags, category } = req.body;
-
-    if (!title || !content || !forumId) {
-      return res.status(400).json({ message: 'Title, content, and forum ID are required' });
-    }
-
-    const forum = await prisma.forum.findUnique({
-      where: { id: forumId }
-    });
-
-    if (!forum) {
-      return res.status(404).json({ message: 'Forum not found' });
-    }
-
-    const post = await prisma.post.create({
-      data: {
-        title,
-        content,
-        forumId,
-        category,
-        authorId: req.user!.id,
-        tags: tags ? tags.split(',') : [],
-      },
-      include: {
-        author: {
-          select: {
-            username: true,
-            id: true
-          }
-        },
-        forum: {
-          select: {
-            name: true,
-            id: true
-          }
-        }
+postRouter.post("/create", loginMiddleware, upload.single("image"), async (req: Request, res: Response) => {
+    try {
+      const { title, content, forumId, tags, category } = req.body;
+      const image = req.file ? `/uploads/${req.file.filename}` : null; 
+  
+      if (!title || !content || !forumId) {
+        return res.status(400).json({ message: "Title, content, and forum ID are required" });
       }
-    });
-
-    res.status(201).json(post);
-  } catch (err) {
-    console.error('Error creating post:', err);
-    res.status(500).json({ message: 'Failed to create post' });
-  }
-});
+  
+      const forum = await prisma.forum.findUnique({ where: { id: Number(forumId) } });
+      if (!forum) {
+        return res.status(404).json({ message: "Forum not found" });
+      }
+  
+      const post = await prisma.post.create({
+        data: {
+          title,
+          content,
+          forumId: Number(forumId),
+          category,
+          imageUrl: image,
+          authorId: req.user!.id,
+          tags: tags ? tags.split(",") : [],
+        },
+        include: {
+          author: { select: { username: true, id: true } },
+          forum: { select: { name: true, id: true } },
+        },
+      });
+  
+      res.status(201).json(post);
+    } catch (err) {
+      console.error("Error creating post:", err);
+      res.status(500).json({ message: "Failed to create post" });
+    }
+  });
 
 postRouter.post('/update', loginMiddleware, async (req: Request, res: Response) => {
   try {

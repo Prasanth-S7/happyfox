@@ -45,7 +45,7 @@ const BottomNavbar = () => {
     ];
 
     return(
-        <div className="h-full w-full flex justify-evenly items-center mx-auto font-satoshi">
+        <div className="h-full w-full flex justify-evenly items-center mx-auto font-satoshi bg-black">
             {
                 navItems.map((navItem, index) => {
                     const isActive = navItem.path === location.pathname;
@@ -53,8 +53,8 @@ const BottomNavbar = () => {
                     return (
                         <Link 
                             className={`flex flex-col transition-all duration-200 items-center font-semibold p-1 rounded-2xl ${
-                                isActive ? 'text-orange-500' : 'bg-transparent text-black'
-                            } hover:bg-slate-50 h-[50px] w-[50px] drop-shadow-none hover:drop-shadow-none`} 
+                                isActive ? 'text-orange-500' : 'bg-transparent text-white'
+                            } hover:bg-black/[10] hover:border h-[50px] w-[50px] drop-shadow-none hover:drop-shadow-none`} 
                             to={navItem.path} 
                             key={index}
                         >
