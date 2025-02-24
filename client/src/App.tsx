@@ -11,6 +11,7 @@ import InboxPage from "./pages/Inbox/Inbox";
 import EventPage from "./pages/Event/Event";
 import AddEventForm from "./pages/Admin/Event/AddEventForm";
 import MainForum from "./pages/MainForum/MainForum";
+import ProtectedRoutes from "./components/custom/misc/ProtectedRoutes";
 
 function App() {
   const router = createBrowserRouter([
@@ -24,7 +25,7 @@ function App() {
     },
     {
       path: '/',
-      element: <Layout />,
+      element: <ProtectedRoutes><Layout /></ProtectedRoutes>,
       children: [
         {
           path: '/',

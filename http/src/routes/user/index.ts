@@ -32,10 +32,10 @@ userRouter.post("/signup", async (req: Request, res: Response): Promise<any> => 
     });
 
     if (existingUser) {
-      return res.status(403).json({ 
-        message: existingUser.username === username 
-          ? "Username already exists" 
-          : "Email already exists" 
+      return res.status(403).json({
+        message: existingUser.username === username
+          ? "Username already exists"
+          : "Email already exists"
       });
     }
 
@@ -64,12 +64,12 @@ userRouter.post("/signup", async (req: Request, res: Response): Promise<any> => 
     });
 
     const token = sign(
-      { id: user.id }, 
+      { id: user.id },
       process.env.JWT_SECRET as string,
       { expiresIn: '24h' }
     );
 
-    res.cookie("token", `Bearer ${token}`, {
+    res.cookie("token", `${token}`, {
       httpOnly: false,
       secure: false,
       sameSite: "lax",
@@ -117,12 +117,12 @@ userRouter.post("/login", async (req: Request, res: Response): Promise<any> => {
 
     const { password: _, ...userWithoutPassword } = user;
     const token = sign(
-      { id: user.id }, 
+      { id: user.id },
       process.env.JWT_SECRET as string,
       { expiresIn: '24h' }
     );
 
-    res.cookie("token", `Bearer ${token}`, {
+    res.cookie("token", `${token}`, {
       httpOnly: false,
       secure: false,
       sameSite: "lax",

@@ -57,18 +57,18 @@ const AddEventForm = () => {
 
             const response = await axios.post('http://localhost:3000/api/v1/event/events', formDataToSend)
 
-            if (!response.ok) throw new Error('Failed to create event');
-
-            setFormData({
-                title: '',
-                by: '',
-                avatar: null,
-                date: '',
-                link: '',
-                description: '',
-                category: '',
-                poster: null
-            });
+            if(response.status == 201) {
+                setFormData({
+                    title: '',
+                    by: '',
+                    avatar: null,
+                    date: '',
+                    link: '',
+                    description: '',
+                    category: '',
+                    poster: null
+                });
+            }
             
         } catch (error) {
             console.error(error)
