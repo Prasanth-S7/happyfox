@@ -68,7 +68,7 @@ const ForumPage = () => {
                     {forum.name}
                   </h3>
                   <p className="text-zinc-400 text-sm">{forum.description}</p>
-                  <p className="text-sm text-zinc-500">
+                  <p className="text-sm text-zinc-500 mt-5">
                     Created by: <span className="text-white">{forum.admin.username}</span>
                   </p>
                 </div>

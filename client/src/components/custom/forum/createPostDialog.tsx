@@ -69,8 +69,8 @@ export function CreatePostDialog({ setPostAdded }: { setPostAdded: any }) {
 
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <Button className=" bg-gradient-to-r bg-orange-500 p-0 z-50">
+      <DialogTrigger asChild className="cursor-pointer bg-orange-500 hover:bg-orange-600 p-0 relative z-50">
+        <Button className=" ">
           Create Post
           <Plus className="h-6 w-6" />
         </Button>

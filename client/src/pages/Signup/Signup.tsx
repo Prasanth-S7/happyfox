@@ -26,7 +26,8 @@ const CardBody = ({ className = "p-4" }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const res = await axios.post('http://localhost:3000/api/v1/user/signup', formData);
-    if(res.status === 200){
+    if(res.status === 201){
+      console.log("reaches here")
       toast.success("Sign Up successfull");
       navigate("/")
     }
