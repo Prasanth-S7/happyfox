@@ -1,6 +1,7 @@
 import ProjectsSignUp from "@/components/custom/project/SginUp";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import ProjectDis from "./ProjectList";
 
 const ProjectPage = () => {
     const [userData, setUserData] = useState({
@@ -18,7 +19,7 @@ const ProjectPage = () => {
             });
             if (res.status == 200) {
                 const data = res.data;
-                setUserData(data)
+                setUserData(data.data)
             }
         } catch (error) {
             console.error(error);
@@ -27,14 +28,13 @@ const ProjectPage = () => {
 
     useEffect(() => {
         getUserdetails();
-        console.log("after thid")
     }, []);
 
     return (
         <div className="h-full flex items-center justify-center">
             {
                 userData.githubAccessToken?
-                <p>User Signed in</p>
+                <ProjectDis />
                 :
                 <ProjectsSignUp />
             }

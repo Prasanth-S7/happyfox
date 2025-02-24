@@ -86,7 +86,7 @@ export function CreateForumDialog({ open, onOpenChange, setForumsAdded }: Create
           <DialogFooter>
             <Button
               type="submit"
-              className="bg-green-500 hover:bg-green-600 text-black font-medium"
+              className="bg-orange-500 hover:bg-orange-700 text-black font-medium"
             >
               Create Forum
             </Button>

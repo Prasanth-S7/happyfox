@@ -1,8 +1,9 @@
+// @ts-nocheck
 //@ts-nocheck
 import express from "express";
 import { Request, Response } from "express";
 import prisma from "../../prismaClient";
-import { sign } from "jsonwebtoken";
+import jwt, { sign } from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import { loginMiddleware } from "../../middlewares/login";
 
@@ -157,6 +158,60 @@ userRouter.post("/logout", (_req: Request, res: Response) => {
     res.status(200).json({ message: "Logged out successfully" });
   } catch (err) {
     console.error('Logout error:', err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+userRouter.patch("/", async (req: Request, res: Response) => {
+  try {
+    console.log()
+    const token = req.headers.authorization?.split(' ')[1];
+    const decodedData = jwt.decode(token, process.env.JWT_SECRET);
+    const userId = decodedData.id; // Assuming your auth middleware adds user to req
+    const { githubUsername } = req.body;
+
+    if (!userId) {
+      res.status(401).json({ message: "Authentication required" });
+      return;
+    }
+
+    if (!githubUsername) {
+      res.status(400).json({ message: "GitHub username is required" });
+      return;
+    }
+
+    const existingUserWithGithub = await prisma.user.findFirst({
+      where: {
+        githubUsername,
+        id: { not: userId }
+      }
+    });
+
+    if (existingUserWithGithub) {
+      res.status(400).json({ message: "This GitHub username is already linked to another account" });
+      return;
+    }
+
+    const updatedUser = await prisma.user.update({
+      where: { id: userId },
+      data: { githubUsername },
+      select: {
+        id: true,
+        username: true,
+        firstName: true,
+        lastName: true,
+        email: true,
+        role: true,
+        xp: true,
+        githubUsername: true,
+        createdAt: true,
+      }
+    });
+
+    res.status(200).json({ user: updatedUser });
+    return;
+  } catch (err) {
+    console.error('Update GitHub username error:', err);
     res.status(500).json({ message: "Internal server error" });
   }
 });
