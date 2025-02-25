@@ -41,12 +41,10 @@ export function CreatePostDialog({ setPostAdded }: { setPostAdded: any }) {
       formData.append("title", title);
       formData.append("content", content);
       formData.append("forumId", forumId || "");
-      formData.append("category", category); // Add category to the form data
+      formData.append("category", category);
       if (image) {
         formData.append("image", image);
       }
-
-      //checking the vulgarity of the content
 
       const aiResponse = await axios.post("http://172.16.59.42:8000/predict_text", {
         input_text: title + " " + content
@@ -64,6 +62,16 @@ export function CreatePostDialog({ setPostAdded }: { setPostAdded: any }) {
       if (response.status === 201) {
         toast.success("Your post has been created successfully!");
         setPostAdded((prev: any) => !prev);
+        const updateXp = await axios.post(BACKEND_URL + "/api/v1/user/update-xp", {
+          xp: 10
+        }, {
+          withCredentials: true
+        });
+
+        if (updateXp.status === 200) {
+          toast.success("You have gained 10 XP! 💪");
+        }
+
       } else {
         toast.error("Failed to create post. Please try again.");
       }
@@ -143,8 +151,8 @@ export function CreatePostDialog({ setPostAdded }: { setPostAdded: any }) {
                 className="border-zinc-700 text-white mt-6 bg-orange-500"
                 onClick={handleEnhanceWithAi}
                 disabled={aiResponseLoader}>
-                  {aiResponseLoader ? "Enhancing..." : "Enhance with AI"}
-                </Button>
+                {aiResponseLoader ? "Enhancing..." : "Enhance with AI"}
+              </Button>
             </div>
           </div>
 

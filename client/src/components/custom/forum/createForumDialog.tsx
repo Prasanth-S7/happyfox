@@ -25,7 +25,7 @@ export function CreateForumDialog({ open, onOpenChange, setForumsAdded }: Create
   const [description, setDescription] = useState("");
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const res = await axios.post(BACKEND_URL+"/api/v1/forum/create", {
+    const res = await axios.post(BACKEND_URL + "/api/v1/forum/create", {
       name: title,
       description: description
     }, {
@@ -33,11 +33,19 @@ export function CreateForumDialog({ open, onOpenChange, setForumsAdded }: Create
     })
 
     if (res.status === 201) {
-      console.log(res.data)
       setForumsAdded((prev: any) => !prev);
       toast.success("Forum created successfully");
+      const updateXp = await axios.post(BACKEND_URL + "/api/v1/user/update-xp", {
+        xp: 10
+      }, {
+        withCredentials: true
+      });
+
+      if (updateXp.status === 200) {
+        toast.success("You have gained 10 XP! 💪");
+      }
     }
-    else{
+    else {
       toast.error("Forum can't be created due to some error")
     }
     setTitle("");

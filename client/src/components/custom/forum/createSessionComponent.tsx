@@ -33,6 +33,16 @@ export function CreateSessionComponent({ setSessionAdded, forumId }: { setSessio
 
       if (response.status === 201) {
         toast.success("Your session has been created successfully!");
+
+        const updateXp = await axios.post(BACKEND_URL + "/api/v1/user/update-xp", {
+          xp: 5
+        }, {
+          withCredentials: true
+        });
+
+        if (updateXp.status === 200) {
+          toast.success("You have gained 5 XP! 💪");
+        }
         setSessionAdded((prev: any) => !prev);
       } else {
         toast.error("Failed to create session. Please try again.");

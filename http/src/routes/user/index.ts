@@ -219,3 +219,47 @@ userRouter.patch("/", async (req: Request, res: Response) => {
 userRouter.get("/self", loginMiddleware, (req: Request, res: Response) => {
   return res.status(200).json(req.user); 
 })
+
+
+userRouter.post("/update-xp", loginMiddleware, async (req: Request, res: Response) => {
+  try {
+    const { xp } = req.body;
+    const userId = req.user.id;
+
+    if (!xp) {
+      res.status(400).json({ message: "XP value is required" });
+      return;
+    }
+
+    const existingXp = await prisma.user.findFirst({
+      where: { id: userId },
+      select: {
+        xp: true,
+      }
+    });
+
+    const updatedUser = await prisma.user.update({
+      where: { id: userId },
+      data: {
+        xp: existingXp.xp + xp,
+      },
+      select: {
+        id: true,
+        username: true,
+        firstName: true,
+        lastName: true,
+        email: true,
+        role: true,
+        xp: true,
+        githubUsername: true,
+        createdAt: true,
+      }
+    });
+
+    res.status(200).json({ user: updatedUser });
+    return;
+  } catch (err) {
+    console.error('Update XP error:', err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
