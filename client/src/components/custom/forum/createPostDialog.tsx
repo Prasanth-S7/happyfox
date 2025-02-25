@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { Select, SelectContent, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select"; // Import ShadCN select components
+import { BACKEND_URL } from "@/config/config";
 
 export function CreatePostDialog({ setPostAdded }: { setPostAdded: any }) {
   const [title, setTitle] = useState("");
@@ -44,7 +45,7 @@ export function CreatePostDialog({ setPostAdded }: { setPostAdded: any }) {
         formData.append("image", image);
       }
 
-      const response = await axios.post("http://localhost:3000/api/v1/post/create", formData, {
+      const response = await axios.post(BACKEND_URL + "/api/v1/post/create", formData, {
         withCredentials: true,
       });
 

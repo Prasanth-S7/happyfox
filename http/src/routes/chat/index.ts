@@ -6,12 +6,19 @@ import { loginMiddleware } from '../../middlewares/login';
 
 export const chatRouter = express.Router();
 
-chatRouter.get('/all', async (req:Request, res:Response) => {
+chatRouter.get('/all/:id', async (req:Request, res:Response) => {
     try{
-        const chats = await prisma.chat.findMany();
-        res.status(200).json(chats);
+
+        const id = Number(req.params.id);
+        const chats = await prisma.chat.findMany({
+            where:{
+                forumId: id
+            }
+        });
+        return res.status(200).json(chats);
     }
     catch(err){
+        console.log(err);
         res.status(500).json(err);
     }
 });
@@ -32,11 +39,12 @@ chatRouter.get('/:id', async (req:Request, res:Response) => {
 });
 
 chatRouter.post('/create', loginMiddleware, async (req:Request, res:Response) => {
-    const {message, authorId} = req.body;
+    const {message, authorId, forumId} = req.body;
     try{
         const chat = await prisma.chat.create({
             data: {
                 message,
+                forumId: Number(forumId),
                 //@ts-ignore
                 authorId: req.user.id
             },
@@ -44,6 +52,7 @@ chatRouter.post('/create', loginMiddleware, async (req:Request, res:Response) =>
         res.status(200).json(chat);
     }
     catch(err){
+        console.log(err);
         res.status(500).json(err);
     }
 });

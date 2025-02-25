@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { CreateForumDialog } from "@/components/custom/forum/createForumDialog";
 import { useNavigate } from "react-router-dom";
+import { BACKEND_URL } from "@/config/config";
 
 interface Forum {
   id: number;
@@ -29,7 +30,7 @@ const ForumPage = () => {
   useEffect(() => {
     const getForums = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/api/v1/forum/all");
+        const res = await axios.get(BACKEND_URL + "/api/v1/forum/all");
         setForums(res.data.forums);
       } catch (error) {
         console.error("Failed to fetch forums:", error);
@@ -67,7 +68,7 @@ const ForumPage = () => {
                   <h3 className="text-xl font-semibold text-white mb-1">
                     {forum.name}
                   </h3>
-                  <p className="text-zinc-400 text-sm">{forum.description}</p>
+                  {/* <p className="text-zinc-400 text-sm">{forum.description}</p> */}
                   <p className="text-sm text-zinc-500 mt-5">
                     Created by: <span className="text-white">{forum.admin.username}</span>
                   </p>

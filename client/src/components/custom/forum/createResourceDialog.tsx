@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { Select, SelectContent, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select"; // Import ShadCN select components
+import { BACKEND_URL } from "@/config/config";
 
 export function CreateResourceDialog({ setResourceAdded }: { setResourceAdded: any }) {
   const [title, setTitle] = useState("");
@@ -46,7 +47,7 @@ export function CreateResourceDialog({ setResourceAdded }: { setResourceAdded: a
         formData.append("resource", file);
       }
 
-      const response = await axios.post("http://localhost:3000/api/v1/resource/create", formData, {
+      const response = await axios.post(BACKEND_URL + "/api/v1/resource/create", formData, {
         withCredentials: true,
       });
 
@@ -140,26 +141,6 @@ export function CreateResourceDialog({ setResourceAdded }: { setResourceAdded: a
               </div>
             </div>
           </div>
-
-          {/* Category Select Box */}
-          {/* <div className="space-y-2">
-            <label htmlFor="category" className="text-sm font-medium">
-              Category
-            </label>
-            <Select value={category} onValueChange={setCategory} required>
-              <SelectTrigger className="bg-zinc-800/50 border-zinc-700 text-white w-full">
-                <SelectValue placeholder="Select a category" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Blockchain">Blockchain</SelectItem>
-                <SelectItem value="AI">AI</SelectItem>
-                <SelectItem value="Web Development">Web Development</SelectItem>
-                <SelectItem value="Design">Design</SelectItem>
-                <SelectItem value="Gaming">Gaming</SelectItem>
-                <SelectItem value="Technology">Technology</SelectItem>
-              </SelectContent>
-            </Select>
-          </div> */}
 
           {/* File Upload */}
           <div className="space-y-2">

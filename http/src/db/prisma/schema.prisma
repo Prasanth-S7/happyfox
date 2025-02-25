@@ -51,6 +51,7 @@ model User {
   projects        ProjectUser[]
   curatedTags     ProjectTag[]
   votes           Vote[]
+  Sessions        Session[]
 }
 
 model Project {
@@ -114,6 +115,8 @@ model Forum {
   members     ForumMember[]
   posts       Post[]
   resources   Resource[]
+  chats       Chat[]
+  Sessions    Session[]
 }
 
 model ForumMember {
@@ -151,8 +154,10 @@ model Chat {
   authorId  Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  forumId   Int
   
   author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  forum     Forum    @relation(fields: [forumId], references: [id], onDelete: Cascade)
 }
 
 model Resource {
@@ -167,6 +172,20 @@ model Resource {
   forumId     Int
   forum       Forum     @relation(fields: [forumId], references: [id], onDelete: Cascade)
   author      User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+}
+
+model Session {
+  id          Int   @id @default(autoincrement())
+  title       String
+  description String
+  category    String
+  joiningLink String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  forumId     Int
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  forum       Forum    @relation(fields: [forumId], references: [id], onDelete: Cascade)
 }
 model ProjectTag {
   id          String            @id @default(uuid())
