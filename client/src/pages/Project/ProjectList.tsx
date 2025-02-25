@@ -94,7 +94,7 @@ const ProjectDis = () => {
   };
 
   const ProjectCard = ({ project }) => (
-    <Card className="w-full">
+    <Card className="w-full bg-black text-white border-white/10">
       <CardHeader>
         <CardTitle>{project.name}</CardTitle>
         <CardDescription>{project.description}</CardDescription>
@@ -102,7 +102,7 @@ const ProjectDis = () => {
       <CardContent>
         <div className="flex flex-wrap gap-2 mb-4">
           {project.techStack.map((tech, index) => (
-            <Badge key={index} variant="outline">{tech}</Badge>
+            <Badge key={index} variant="">{tech}</Badge>
           ))}
         </div>
         {project.imageUrl && (
@@ -115,7 +115,7 @@ const ProjectDis = () => {
           </div>
         )}
         <div className="flex justify-between items-center">
-          <Badge variant={project.status === "COMPLETED" ? "success" : "secondary"}>
+          <Badge variant={project.status === "COMPLETED" ? "success" : "secondary"} className='bg-black text-white'>
             {project.status}
           </Badge>
           <Badge>{project.projectType}</Badge>
@@ -125,7 +125,7 @@ const ProjectDis = () => {
   );
 
   const ProjectGrid = ({ projects }) => (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 bg-black">
       {projects.map(project => (
         <ProjectCard key={project.id} project={project} />
       ))}
@@ -133,7 +133,7 @@ const ProjectDis = () => {
   );
 
   const RepoSelector = () => (
-    <div className="mt-6 border rounded p-4">
+    <div className="mt-6 border rounded p-4 bg-black">
       <h3 className="text-lg font-medium mb-4">Select a repository to import</h3>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-96 overflow-y-auto">
         {githubRepos.map(repo => (
@@ -142,9 +142,9 @@ const ProjectDis = () => {
               <CardTitle className="text-base">{repo.name}</CardTitle>
               <CardDescription className="text-xs">{repo.description}</CardDescription>
             </CardHeader>
-            <CardFooter className="p-4 pt-0 flex justify-between items-center">
-              <Badge variant="outline">{repo.language}</Badge>
-              <span className="text-xs text-muted-foreground">
+            <CardFooter className="p-4 pt-0 flex justify-between items-center ">
+              <Badge variant="outline" className='bg-white'>{repo.language}</Badge>
+              <span className="text-xs text-white bg-white">
                 {new Date(repo.updated_at).toLocaleDateString()}
               </span>
             </CardFooter>
@@ -158,12 +158,12 @@ const ProjectDis = () => {
   );
 
   return (
-    <div className="container mx-auto py-8">
+    <div className="container mx-auto py-8 bg-black">
       <h1 className="text-3xl font-bold mb-8">Projects</h1>
       
-      <Tabs defaultValue="all" className="w-full">
-        <TabsList className="mb-8">
-          <TabsTrigger value="all">All Projects</TabsTrigger>
+      <Tabs defaultValue="all" className="w-full bg-black text-white">
+        <TabsList className="mb-8 bg-black border border-white/10">
+          <TabsTrigger value="all" className='bg-black text-white'>All Projects</TabsTrigger>
           <TabsTrigger value="user">My Projects</TabsTrigger>
         </TabsList>
         
@@ -193,7 +193,7 @@ const ProjectDis = () => {
             <>
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-xl font-semibold">My Projects</h2>
-                <Button onClick={handleImportFromGithub} disabled={isImporting}>
+                <Button onClick={handleImportFromGithub} disabled={isImporting} className='bg-orange-500 text-white'>
                   {isImporting ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />

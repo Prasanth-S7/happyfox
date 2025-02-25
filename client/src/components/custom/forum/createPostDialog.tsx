@@ -16,6 +16,7 @@ export function CreatePostDialog({ setPostAdded }: { setPostAdded: any }) {
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [aiResponseLoader, setAiResponseLoader] = useState(false);
   const [category, setCategory] = useState<string>("");
   const { id: forumId } = useParams();
 
@@ -45,6 +46,17 @@ export function CreatePostDialog({ setPostAdded }: { setPostAdded: any }) {
         formData.append("image", image);
       }
 
+      //checking the vulgarity of the content
+
+      const aiResponse = await axios.post("http://172.16.59.42:8000/predict_text", {
+        input_text: title + " " + content
+      });
+
+      if (aiResponse.data.is_offensive) {
+        toast.error("This content is not suitable for this forum");
+        return;
+      }
+
       const response = await axios.post(BACKEND_URL + "/api/v1/post/create", formData, {
         withCredentials: true,
       });
@@ -65,6 +77,22 @@ export function CreatePostDialog({ setPostAdded }: { setPostAdded: any }) {
       toast.error("Failed to create post. Please try again.");
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleEnhanceWithAi = async () => {
+    try {
+      setAiResponseLoader(true);
+      const aiResponse = await axios.post("http://172.16.59.42:8000/generate_content", {
+        input_text: content,
+        style: "concise"
+      });
+      setContent(aiResponse.data.response.choices[0].text);
+      console.log(aiResponse.data);
+    } catch (error) {
+      toast.error("Failed to enhance content with AI. Please try again.");
+    } finally {
+      setAiResponseLoader(false);
     }
   };
 
@@ -95,19 +123,31 @@ export function CreatePostDialog({ setPostAdded }: { setPostAdded: any }) {
             />
           </div>
           <div className="space-y-2">
-            <label htmlFor="content" className="text-sm font-medium">
-              Content
-            </label>
-            <Textarea
-              id="content"
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              className="bg-zinc-800/50 border-zinc-700 text-white min-h-[100px]"
-              placeholder="Write your post content..."
-              required
-            />
+            <div className="flex space-x-2 items-start">
+              <div>
+                <label htmlFor="content" className="text-sm font-medium">
+                  Content
+                </label>
+                <Textarea
+                  id="content"
+                  value={content}
+                  onChange={(e) => setContent(e.target.value)}
+                  className="bg-zinc-800/50 border-zinc-700 text-white min-h-[100px] w-[220px]"
+                  placeholder="Write your post content..."
+                  required
+                />
+              </div>
+              <Button
+                type="button"
+                variant="outline"
+                className="border-zinc-700 text-white mt-6 bg-orange-500"
+                onClick={handleEnhanceWithAi}
+                disabled={aiResponseLoader}>
+                  {aiResponseLoader ? "Enhancing..." : "Enhance with AI"}
+                </Button>
+            </div>
           </div>
-          
+
           {/* Category Select Box */}
           <div className="space-y-2">
             <label htmlFor="category" className="text-sm font-medium">
@@ -161,7 +201,7 @@ export function CreatePostDialog({ setPostAdded }: { setPostAdded: any }) {
               </div>
             )}
           </div>
-          
+
           {/* Submit Button */}
           <Button
             type="submit"

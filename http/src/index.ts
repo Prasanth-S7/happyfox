@@ -30,6 +30,6 @@ app.use('/uploads', express.static('uploads'));
 app.use('/api/v1', router);
 
 // Create an HTTPS server
-https.createServer(credentials, app).listen(PORT, () => {
-    console.log(`🚀 HTTPS Server started on port ${PORT}`);
+app.listen(PORT, () => {
+    console.log(`🚀 HTTP Server started on port ${PORT}`);
 });
