@@ -55,7 +55,7 @@ const AddEventForm = () => {
                 formDataToSend.append(key, formData[key]);
             });
 
-            const response = await axios.post('http://localhost:3000/api/v1/event/events', formDataToSend)
+            const response = await axios.post(`${import.meta.env.VITE_BACKEND_BASE_URL}api/v1/event/events`, formDataToSend)
 
             if(response.status == 201) {
                 setFormData({

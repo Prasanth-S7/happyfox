@@ -45,7 +45,7 @@ export function CreatePostDialog({ setPostAdded }: { setPostAdded: any }) {
         formData.append("image", image);
       }
 
-      const response = await axios.post(BACKEND_URL + "/api/v1/post/create", formData, {
+      const response = await axios.post(import.meta.env.VITE_BACKEND_BASE_URL + "api/v1/post/create", formData, {
         withCredentials: true,
       });
 

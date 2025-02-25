@@ -35,7 +35,7 @@ export function ChatComponent({ forumId }: ChatComponentProps) {
   const fetchChatMessages = async () => {
     setIsLoading(true);
     try {
-      const res = await axios.get(`${BACKEND_URL}/api/v1/chat/all/${forumId}`);
+      const res = await axios.get(`${import.meta.env.VITE_BACKEND_BASE_URL}api/v1/chat/all/${forumId}`);
       setChatMessages(res.data);
       
       setTimeout(() => {
@@ -70,7 +70,7 @@ export function ChatComponent({ forumId }: ChatComponentProps) {
 
   const fetchCurrentUser = async () => {
     try {
-      const res = await axios.get(BACKEND_URL+'/api/v1/user/self', {
+      const res = await axios.get(import.meta.env.VITE_BACKEND_BASE_URL+'api/v1/user/self', {
         withCredentials: true,
       });
       
@@ -95,7 +95,7 @@ export function ChatComponent({ forumId }: ChatComponentProps) {
   const toggleLike = async (messageId: number) => {
     try {
       if (likedMessages[messageId]) {
-        await axios.delete(`${BACKEND_URL}/api/v1/chat/${messageId}/like`, {
+        await axios.delete(`${import.meta.env.VITE_BACKEND_BASE_URL}api/v1/chat/${messageId}/like`, {
           withCredentials: true,
         });
         
@@ -110,7 +110,7 @@ export function ChatComponent({ forumId }: ChatComponentProps) {
           )
         );
       } else {
-        await axios.post(`${BACKEND_URL}/api/v1/chat/${messageId}/like`, {}, {
+        await axios.post(`${import.meta.env.VITE_BACKEND_BASE_URL}api/v1/chat/${messageId}/like`, {}, {
           withCredentials: true,
         });
         
@@ -136,7 +136,7 @@ export function ChatComponent({ forumId }: ChatComponentProps) {
     
     try {
       const res = await axios.post(
-        `${BACKEND_URL}/api/v1/chat/create`, 
+        `${import.meta.env.VITE_BACKEND_BASE_URL}api/v1/chat/create`, 
         {
           message: newMessage,
           forumId: forumId

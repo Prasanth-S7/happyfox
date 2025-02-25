@@ -7,7 +7,7 @@ import { Github, Loader2 } from "lucide-react";
 import axios from "axios";
 import Cookies from 'js-cookie';
 
-const BASE_URL = 'http://localhost:3000/api/v1/github'
+const BASE_URL = `${import.meta.env.VITE_BACKEND_BASE_URL}api/v1/github`
 
 const ProjectDis = () => {
   const [allProjects, setAllProjects] = useState([]);

@@ -17,7 +17,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
-        const res = await axios.get(BACKEND_URL+"/api/v1/user/self", {
+        const res = await axios.get(import.meta.env.VITE_BACKEND_BASE_URL+"api/v1/user/self", {
           withCredentials: true,
         });
         setUserDetails(res.data);

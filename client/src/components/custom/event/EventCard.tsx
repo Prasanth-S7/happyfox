@@ -22,7 +22,7 @@ const EventCard = ({ event }: { event: EventData }) => {
                 <a target="_" href={event.link}>
                     <img
                         className="object-cover absolute top-0 left-0 right-0 bottom-0 z-10 transition-opacity duration-300 group-hover:opacity-70"
-                        src={`http://localhost:3000/${event.poster}`}
+                        src={`${import.meta.env.VITE_BACKEND_BASE_URL}${event.poster}`}
                         alt="Event Poster"
                     />
 
@@ -38,7 +38,7 @@ const EventCard = ({ event }: { event: EventData }) => {
                                 <div className="flex items-center space-x-2">
                                     <Avatar className="h-7 w-7 border-2 border-orange-500 group-hover:border-orange-600 transition-colors duration-300">
                                         <AvatarImage
-                                            src={`http://localhost:3000/${event.avatar}`}
+                                            src={`${import.meta.env.VITE_BACKEND_BASE_URL}${event.avatar}`}
                                             alt={organizerName}
                                         />
                                         <AvatarFallback className="bg-slate-800 text-white">

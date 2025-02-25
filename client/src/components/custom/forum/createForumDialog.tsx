@@ -25,7 +25,7 @@ export function CreateForumDialog({ open, onOpenChange, setForumsAdded }: Create
   const [description, setDescription] = useState("");
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const res = await axios.post(BACKEND_URL+"/api/v1/forum/create", {
+    const res = await axios.post(import.meta.env.VITE_BACKEND_BASE_URL+"api/v1/forum/create", {
       name: title,
       description: description
     }, {

@@ -25,7 +25,7 @@ const ProjectsSignUp = () => {
         setError("");
 
         try {
-            await axios.patch(BACKEND_URL+'/api/v1/user', { githubUsername }, {
+            await axios.patch(import.meta.env.VITE_BACKEND_BASE_URL+'api/v1/user', { githubUsername }, {
                 headers: {
                     'Authorization': `Bearer ${Cookies.get('token')}`
                 }

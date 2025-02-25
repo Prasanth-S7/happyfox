@@ -20,7 +20,7 @@ const credentials = { key: privateKey, cert: certificate };
 
 app.use(morgan('dev'));
 app.use(cors({
-    origin: ["http://localhost:5173", "http://172.16.59.133:5173", "https://arize.pages.dev"], 
+    origin: ["http://localhost:5173", "http://192.168.152.53:5173", "https://arize.pages.dev"], 
     credentials: true,
 }));
 app.use(express.json());
@@ -29,7 +29,6 @@ app.use(cookieParser());
 app.use('/uploads', express.static('uploads'));
 app.use('/api/v1', router);
 
-// Create an HTTPS server
-https.createServer(credentials, app).listen(PORT, () => {
+app.listen(PORT, () => {
     console.log(`🚀 HTTPS Server started on port ${PORT}`);
 });

@@ -97,28 +97,28 @@ export default function MainForum() {
     useEffect(() => {
         const fetchPosts = async () => {
             setIsLoading(true)
-            const res = await axios.get(`${BACKEND_URL}/api/v1/post/all/${forumId}`)
+            const res = await axios.get(`${import.meta.env.VITE_BACKEND_BASE_URL}api/v1/post/all/${forumId}`)
             setPostsData(res.data)
             setIsLoading(false)
         }
 
         const fetchForumDetails = async () => {
-            const res = await axios.get(`${BACKEND_URL}/api/v1/forum/${forumId}`)
+            const res = await axios.get(`${import.meta.env.VITE_BACKEND_BASE_URL}api/v1/forum/${forumId}`)
             setForumData(res.data)
         }
 
         const fetchResources = async () => {
-            const res = await axios.get(`${BACKEND_URL}/api/v1/resource/all/${forumId}`)
+            const res = await axios.get(`${import.meta.env.VITE_BACKEND_BASE_URL}api/v1/resource/all/${forumId}`)
             setResourceData(res.data)
         }
 
         const fetchSessions = async () => {
-            const res = await axios.get(`${BACKEND_URL}/api/v1/session/all/${forumId}`)
+            const res = await axios.get(`${import.meta.env.VITE_BACKEND_BASE_URL}api/v1/session/all/${forumId}`)
             setSessionsData(res.data)
         }
 
         const isAdminOfThisForum = async () => {
-            const res = await axios.get(`${BACKEND_URL}/api/v1/forum/isAdmin/${forumId}`, {
+            const res = await axios.get(`${import.meta.env.VITE_BACKEND_BASE_URL}api/v1/forum/isAdmin/${forumId}`, {
                 withCredentials: true,
             })
             if (res.status === 200) {
@@ -139,7 +139,7 @@ export default function MainForum() {
             setLikedPosts((prev) => ({ ...prev, [postId]: newLikedState }))
 
             const endpoint = newLikedState ? "upvote" : "downvote"
-            await axios.post(`${BACKEND_URL}/api/v1/post/${endpoint}`, { id: postId }, { withCredentials: true })
+            await axios.post(`${import.meta.env.VITE_BACKEND_BASE_URL}api/v1/post/${endpoint}`, { id: postId }, { withCredentials: true })
 
             if (postsData) {
                 setPostsData({

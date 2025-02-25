@@ -30,7 +30,7 @@ const ForumPage = () => {
   useEffect(() => {
     const getForums = async () => {
       try {
-        const res = await axios.get(BACKEND_URL + "/api/v1/forum/all");
+        const res = await axios.get(import.meta.env.VITE_BACKEND_BASE_URL + "api/v1/forum/all");
         setForums(res.data.forums);
       } catch (error) {
         console.error("Failed to fetch forums:", error);

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import prisma from "../../prismaClient";
-import {decode, verify} from 'jsonwebtoken'
+import jwt, {decode, verify} from 'jsonwebtoken'
 
 const JWT_SECRET = process.env.JWT_SECRET
 
@@ -19,7 +19,7 @@ const userGithubDetails = async (req: Request, res: Response) => {
             where: {
                 id: id
             },
-            select: {
+        select: {
                 githubAccessToken: true,
                 githubAvatarUrl: true,
                 githubProfileUrl: true,
