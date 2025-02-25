@@ -47,9 +47,8 @@ const EventPage = () => {
 
     return (
         <div className="p-4 bg-black" style={{ minHeight: 'calc(100vh - 115px)' }}>
-            {/* Category Slider */}
             <div className="mb-6">
-                <div className="flex overflow-x-auto gap-2 pb-2 snap-x snap-mandatory scrollbar-hide">
+                <div className="flex flex-wrap   overflow-x-auto gap-2 pb-2 snap-x snap-mandatory scrollbar-hide">
                     {filterOptions.map(({ id, name }) => (
                         <button
                             key={id}
@@ -66,7 +65,6 @@ const EventPage = () => {
                 </div>
             </div>
 
-            {/* Event Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 bg-black">
                 {getFilteredEvents().map(event => (
                     <EventCard
