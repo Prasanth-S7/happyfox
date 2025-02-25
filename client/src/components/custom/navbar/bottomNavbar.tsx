@@ -32,11 +32,11 @@ const BottomNavbar = () => {
             icon: (props) => <PuzzleIcon {...props} />,
             label: 'Project'
         },
-        {
-            path: '/chat',
-            icon: (props) => <ChatIcon {...props} />,
-            label: 'Chat'
-        },
+        // {
+        //     path: '/chat',
+        //     icon: (props) => <ChatIcon {...props} />,
+        //     label: 'Chat'
+        // },
         // {
         //     path: '/inbox',
         //     icon: (props) => <NotificationIcon {...props} />,

@@ -29,6 +29,7 @@ app.use(cookieParser());
 app.use('/uploads', express.static('uploads'));
 app.use('/api/v1', router);
 
+// Create an HTTPS server
 app.listen(PORT, () => {
-    console.log(`🚀 HTTPS Server started on port ${PORT}`);
+    console.log(`🚀 HTTP Server started on port ${PORT}`);
 });

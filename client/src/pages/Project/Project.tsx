@@ -31,7 +31,7 @@ const ProjectPage = () => {
     }, []);
 
     return (
-        <div className="h-full flex items-center justify-center">
+        <div className="h-full flex justify-center bg-black min-h-[calc(100vh-105px)]">
             {
                 userData.githubAccessToken?
                 <ProjectDis />

@@ -42,24 +42,24 @@ const TopNavbar = () => {
   };
 
   return (
-    <div className="h-full w-full grid grid-cols-[50px_auto_50px] items-center bg-black border-b border-white/20">
-      <div>
+    <div className="h-full w-full grid grid-cols-[auto_50px] items-center bg-black border-b border-white/20">
+      {/* <div>
         <Sidebar />
-      </div>
+      </div> */}
       <div className="flex items-center">
         <p className="ml-2 text-xl font-bold text-white">
           Campus <span className="text-orange-500">{getCurrentLabel()}</span>
         </p>
       </div>
       <div className="flex items-center space-x-2 justify-end">
-        <Link to={"/inbox"}>
+        {/* <Link to={"/inbox"}>
           <Button
             variant={"ghost"}
             className="bg-transparent border-0 drop-shadow-none text-foreground hover:bg-transparent flex items-center justify-center"
           >
             <NotificationIcon />
           </Button>
-        </Link>
+        </Link> */}
         <Button
           variant={"ghost"}
           className="w-[50px] h-[50px] bg-transparent text-transparent hover:bg-transparent"
