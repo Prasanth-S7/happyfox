@@ -21,7 +21,7 @@ export function CreateSessionComponent({ setSessionAdded, forumId }: { setSessio
     setIsSubmitting(true);
 
     try {
-      const response = await axios.post(BACKEND_URL + "/api/v1/session/create", {
+      const response = await axios.post(import.meta.env.VITE_BACKEND_BASE_URL + "api/v1/session/create", {
         title,
         description,
         category,

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
 import axios from "axios"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { ScrollArea } from "@/components/ui/scroll-area"
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import { Book, MessageSquare, Play, Heart, X } from "lucide-react"
 import { CreatePostDialog } from "@/components/custom/forum/createPostDialog"
 import { CreateResourceDialog } from "@/components/custom/forum/createResourceDialog"
@@ -97,28 +97,28 @@ export default function MainForum() {
     useEffect(() => {
         const fetchPosts = async () => {
             setIsLoading(true)
-            const res = await axios.get(`${BACKEND_URL}/api/v1/post/all/${forumId}`)
+            const res = await axios.get(`${import.meta.env.VITE_BACKEND_BASE_URL}api/v1/post/all/${forumId}`)
             setPostsData(res.data)
             setIsLoading(false)
         }
 
         const fetchForumDetails = async () => {
-            const res = await axios.get(`${BACKEND_URL}/api/v1/forum/${forumId}`)
+            const res = await axios.get(`${import.meta.env.VITE_BACKEND_BASE_URL}api/v1/forum/${forumId}`)
             setForumData(res.data)
         }
 
         const fetchResources = async () => {
-            const res = await axios.get(`${BACKEND_URL}/api/v1/resource/all/${forumId}`)
+            const res = await axios.get(`${import.meta.env.VITE_BACKEND_BASE_URL}api/v1/resource/all/${forumId}`)
             setResourceData(res.data)
         }
 
         const fetchSessions = async () => {
-            const res = await axios.get(`${BACKEND_URL}/api/v1/session/all/${forumId}`)
+            const res = await axios.get(`${import.meta.env.VITE_BACKEND_BASE_URL}api/v1/session/all/${forumId}`)
             setSessionsData(res.data)
         }
 
         const isAdminOfThisForum = async () => {
-            const res = await axios.get(`${BACKEND_URL}/api/v1/forum/isAdmin/${forumId}`, {
+            const res = await axios.get(`${import.meta.env.VITE_BACKEND_BASE_URL}api/v1/forum/isAdmin/${forumId}`, {
                 withCredentials: true,
             })
             if (res.status === 200) {
@@ -139,7 +139,7 @@ export default function MainForum() {
             setLikedPosts((prev) => ({ ...prev, [postId]: newLikedState }))
 
             const endpoint = newLikedState ? "upvote" : "downvote"
-            await axios.post(`${BACKEND_URL}/api/v1/post/${endpoint}`, { id: postId }, { withCredentials: true })
+            await axios.post(`${import.meta.env.VITE_BACKEND_BASE_URL}api/v1/post/${endpoint}`, { id: postId }, { withCredentials: true })
 
             if (postsData) {
                 setPostsData({
@@ -171,7 +171,7 @@ export default function MainForum() {
     return (
         <div className="min-h-screen bg-black text-white font-satoshi">
             <div className="relative h-48 bg-gradient-to-r from-purple-900 via-violet-800 to-purple-900">
-                <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7')] bg-cover bg-center mix-blend-overlay opacity-20" />
+                {/* <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7')] bg-cover bg-center mix-blend-overlay opacity-20" /> */}
                 <div className="absolute -bottom-16 left-8">
                     <div className="relative">
                         <img
@@ -201,24 +201,27 @@ export default function MainForum() {
 
                 <div className="mt-8">
                     <Tabs defaultValue="sessions" className="w-full" onValueChange={setActiveTab} value={activeTab}>
-                        <TabsList className="w-full bg-zinc-800/50 border border-zinc-700/50 py-6 z-50 relative">
-                            <TabsTrigger value="sessions" className="w-full py-2">
-                                <Play className="mr-2 h-4 w-4" />
-                                Sessions
-                            </TabsTrigger>
-                            <TabsTrigger value="posts" className="w-full py-2">
-                                <MessageSquare className="mr-2 h-4 w-4" />
-                                Posts
-                            </TabsTrigger>
-                            <TabsTrigger value="resources" className="w-full py-2">
-                                <Book className="mr-2 h-4 w-4" />
-                                Resources
-                            </TabsTrigger>
-                            <TabsTrigger value="chat" className="w-full py-2" onClick={handleChatTabClick}>
-                                <MessageSquare className="mr-2 h-4 w-4" />
-                                Chat
-                            </TabsTrigger>
-                        </TabsList>
+                        <ScrollArea className="w-[320px]">
+                            <TabsList className="w-full bg-zinc-800/50 border border-zinc-700/50 py-6 z-50">
+                                <TabsTrigger value="sessions" className="w-full py-2">
+                                    <Play className="mr-2 h-4 w-4" />
+                                    Sessions
+                                </TabsTrigger>
+                                <TabsTrigger value="posts" className="w-full py-2">
+                                    <MessageSquare className="mr-2 h-4 w-4" />
+                                    Posts
+                                </TabsTrigger>
+                                <TabsTrigger value="resources" className="w-full py-2">
+                                    <Book className="mr-2 h-4 w-4" />
+                                    Resources
+                                </TabsTrigger>
+                                <TabsTrigger value="chat" className="w-full py-2" onClick={handleChatTabClick}>
+                                    <MessageSquare className="mr-2 h-4 w-4" />
+                                    Chat
+                                </TabsTrigger>
+                            </TabsList>
+                            <ScrollBar orientation="horizontal" />
+                        </ScrollArea>
 
                         {isAdmin && (
                             <>
@@ -250,7 +253,7 @@ export default function MainForum() {
                                 ))}
                             </TabsContent>
 
-                            <TabsContent value="posts" className="p-4">
+                            <TabsContent value="posts" className="p-2">
                                 {isLoading ? (
                                     <div className="text-center py-8">Loading posts...</div>
                                 ) : (
@@ -262,7 +265,7 @@ export default function MainForum() {
                                             >
                                                 <div className="aspect-square w-full relative">
                                                     <img
-                                                        src={`${BACKEND_URL}${post.imageUrl}`}
+                                                        src={`${import.meta.env.VITE_BACKEND_BASE_URL}${post.imageUrl?.slice(1)}`}
                                                         alt={post.title}
                                                         className="object-cover w-full h-full"
                                                     />
@@ -309,7 +312,7 @@ export default function MainForum() {
                                             <span className="text-sm text-purple-400 font-medium">{resource.type}</span>
                                         </div>
                                         <a
-                                            href={`${BACKEND_URL}${resource.resourceUrl}`}
+                                            href={`${import.meta.env.VITE_BACKEND_BASE_URL}${resource.resourceUrl}`}
                                             download={resource.title}
                                             className="mt-4 inline-block bg-gradient-to-r bg-orange-500 text-white py-2 px-4 rounded-lg hover:bg-orange-600"
                                         >

@@ -14,7 +14,7 @@ const ProjectPage = () => {
     })
     const getUserdetails = async () => {
         try {
-            const res = await axios.get('http://localhost:3000/api/v1/github/user', {
+            const res = await axios.get(`${import.meta.env.VITE_BACKEND_BASE_URL}api/v1/github/user`, {
                 withCredentials: true,
             });
             if (res.status == 200) {

@@ -47,7 +47,7 @@ export function CreateResourceDialog({ setResourceAdded }: { setResourceAdded: a
         formData.append("resource", file);
       }
 
-      const response = await axios.post(BACKEND_URL + "/api/v1/resource/create", formData, {
+      const response = await axios.post(import.meta.env.VITE_BACKEND_BASE_URL + "api/v1/resource/create", formData, {
         withCredentials: true,
       });
 

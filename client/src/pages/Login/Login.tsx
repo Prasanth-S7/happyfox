@@ -26,7 +26,7 @@ const CardBody = ({ className = "p-4" }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log(formData);
-    const res = await axios.post(BACKEND_URL+'/api/v1/user/login', formData, {
+    const res = await axios.post(import.meta.env.VITE_BACKEND_BASE_URL+'api/v1/user/login', formData, {
         withCredentials: true,
         headers:{
             'content-type': 'application/json'

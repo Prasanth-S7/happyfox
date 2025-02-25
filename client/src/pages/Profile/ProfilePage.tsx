@@ -8,16 +8,22 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Mail, Calendar, Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BACKEND_URL } from "@/config/config";
+import Cookies from "js-cookie";
 
 const Profile = () => {
   const navigate = useNavigate();
   const [userDetails, setUserDetails] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const Logout = async () => {
+    Cookies.set('token', '');
+    window.location.reload();
+  }
+
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
-        const res = await axios.get(BACKEND_URL+"/api/v1/user/self", {
+        const res = await axios.get(import.meta.env.VITE_BACKEND_BASE_URL + "api/v1/user/self", {
           withCredentials: true,
         });
         setUserDetails(res.data);
@@ -38,14 +44,20 @@ const Profile = () => {
         <div className="flex items-center justify-between mb-6">
           <Button
             onClick={() => navigate(-1)}
-            className="flex items-center bg-orange-500 text-white "  
+            className="flex items-center bg-orange-500 text-white "
             aria-label="Go back"
           >
             <ArrowLeft className="h-5 w-5 mr-2" />
             <span>Back</span>
           </Button>
           <h1 className="text-2xl font-bold">Profile</h1>
-          <div className="w-16" /> {/* Empty div for spacing */}
+          <Button
+            onClick={Logout}
+            className="flex items-center bg-orange-500 text-white "
+            aria-label="Go back"
+          >
+            <span>Logout</span>
+          </Button>
         </div>
 
         {loading ? (
@@ -67,12 +79,13 @@ const Profile = () => {
                     <Badge className="absolute -bottom-2 right-0 bg-green-500 border-0 px-2 py-1 text-xs font-semibold">
                       Online
                     </Badge>
+
                   </div>
                   <h2 className="text-xl font-semibold mt-4">
                     {userDetails.firstName} {userDetails.lastName}
                   </h2>
                   <div className="mt-2 flex items-center">
-                    <Badge className="bg-black text-orange-400 border-0"> 
+                    <Badge className="bg-black text-orange-400 border-0">
                       {userDetails.xp} XP
                     </Badge>
                   </div>
@@ -94,7 +107,7 @@ const Profile = () => {
                     </div>
                     <span className="text-white text-sm">{userDetails.email}</span>
                   </div>
-                  
+
                   <div className="flex items-center justify-between py-2 border-b border-gray-800">
                     <div className="flex items-center">
                       <Calendar className="h-4 w-4 mr-2 text-gray-400" />
@@ -104,7 +117,7 @@ const Profile = () => {
                       {new Date(userDetails.createdAt).toLocaleDateString()}
                     </span>
                   </div>
-                  
+
                   <div className="flex items-center justify-between py-2">
                     <div className="flex items-center">
                       <Award className="h-4 w-4 mr-2 text-orange-500" />
