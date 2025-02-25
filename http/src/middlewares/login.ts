@@ -31,6 +31,8 @@ export const loginMiddleware = async (
     const authHeader = req.headers.authorization;
     const cookieToken = req.cookies?.token;
 
+    console.log(authHeader, cookieToken)
+
     let token: string | undefined;
 
     if (authHeader?.startsWith('Bearer ')) {

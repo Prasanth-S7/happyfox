@@ -34,7 +34,7 @@ export function CreateSessionComponent({ setSessionAdded, forumId }: { setSessio
       if (response.status === 201) {
         toast.success("Your session has been created successfully!");
 
-        const updateXp = await axios.post(BACKEND_URL + "/api/v1/user/update-xp", {
+        const updateXp = await axios.post(import.meta.env.VITE_BACKEND_BASE_URL + "api/v1/user/update-xp", { 
           xp: 5
         }, {
           withCredentials: true

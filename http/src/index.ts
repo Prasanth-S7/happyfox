@@ -20,7 +20,7 @@ const credentials = { key: privateKey, cert: certificate };
 
 app.use(morgan('dev'));
 app.use(cors({
-    origin: ["http://localhost:5173", "http://192.168.152.53:5173", "https://arize.pages.dev"], 
+    origin: ["http://localhost:5173", "http://192.168.152.53:5173", "https://arize.pages.dev", "http://192.168.152.11:5173"], 
     credentials: true,
 }));
 app.use(express.json());

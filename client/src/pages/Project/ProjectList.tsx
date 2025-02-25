@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Github, Loader2 } from "lucide-react";
 import axios from "axios";
 import Cookies from 'js-cookie';
+import { EyeIcon } from 'lucide-react';
 
 const BASE_URL = `${import.meta.env.VITE_BACKEND_BASE_URL}api/v1/github`
 
@@ -93,7 +94,9 @@ const ProjectDis = () => {
     }
   };
 
-  const ProjectCard = ({ project }) => (
+  const ProjectCard = ({ project }) => {
+    console.log(project)
+    return(
     <Card className="w-full bg-black text-white border-white/10">
       <CardHeader>
         <CardTitle>{project.name}</CardTitle>
@@ -119,10 +122,12 @@ const ProjectDis = () => {
             {project.status}
           </Badge>
           <Badge>{project.projectType}</Badge>
+          <a href={project.githubUrl}><EyeIcon /></a>
         </div>
       </CardContent>
     </Card>
   );
+}
 
   const ProjectGrid = ({ projects }) => (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 bg-black">

@@ -87,7 +87,7 @@ export function ChatComponent({ forumId }: ChatComponentProps) {
     // fetchLikedMessages();
     fetchCurrentUser();
 
-    const intervalId = setInterval(fetchChatMessages, 10000); 
+    const intervalId = setInterval(fetchChatMessages, 3000); 
     
     return () => clearInterval(intervalId);
   }, [forumId]);

@@ -201,22 +201,22 @@ export default function MainForum() {
 
                 <div className="mt-8">
                     <Tabs defaultValue="sessions" className="w-full" onValueChange={setActiveTab} value={activeTab}>
-                        <ScrollArea className="w-[320px]">
+                        <ScrollArea className="w-[290px] border border-white/10 rounded-2xl">
                             <TabsList className="w-full bg-zinc-800/50 border border-zinc-700/50 py-6 z-50">
                                 <TabsTrigger value="sessions" className="w-full py-2">
-                                    <Play className="mr-2 h-4 w-4" />
+                                    {/* <Play className="mr-2 h-4 w-4" /> */}
                                     Sessions
                                 </TabsTrigger>
                                 <TabsTrigger value="posts" className="w-full py-2">
-                                    <MessageSquare className="mr-2 h-4 w-4" />
+                                    {/* <MessageSquare className="mr-2 h-4 w-4" /> */}
                                     Posts
                                 </TabsTrigger>
                                 <TabsTrigger value="resources" className="w-full py-2">
-                                    <Book className="mr-2 h-4 w-4" />
+                                    {/* <Book className="mr-2 h-4 w-4" /> */}
                                     Resources
                                 </TabsTrigger>
                                 <TabsTrigger value="chat" className="w-full py-2" onClick={handleChatTabClick}>
-                                    <MessageSquare className="mr-2 h-4 w-4" />
+                                    {/* <MessageSquare className="mr-2 h-4 w-4" /> */}
                                     Chat
                                 </TabsTrigger>
                             </TabsList>
@@ -312,7 +312,7 @@ export default function MainForum() {
                                             <span className="text-sm text-purple-400 font-medium">{resource.type}</span>
                                         </div>
                                         <a
-                                            href={`${import.meta.env.VITE_BACKEND_BASE_URL}${resource.resourceUrl}`}
+                                            href={`${import.meta.env.VITE_BACKEND_BASE_URL}${resource.resourceUrl.substring(1)}`}
                                             download={resource.title}
                                             className="mt-4 inline-block bg-gradient-to-r bg-orange-500 text-white py-2 px-4 rounded-lg hover:bg-orange-600"
                                         >

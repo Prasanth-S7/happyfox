@@ -46,7 +46,7 @@ export function CreatePostDialog({ setPostAdded }: { setPostAdded: any }) {
         formData.append("image", image);
       }
 
-      const aiResponse = await axios.post("http://172.16.59.42:8000/predict_text", {
+      const aiResponse = await axios.post("http://192.168.152.223:8000/predict_text", {
         input_text: title + " " + content
       });
 
@@ -55,14 +55,14 @@ export function CreatePostDialog({ setPostAdded }: { setPostAdded: any }) {
         return;
       }
 
-      const response = await axios.post(BACKEND_URL + "/api/v1/post/create", formData, {
+      const response = await axios.post(import.meta.env.VITE_BACKEND_BASE_URL + "api/v1/post/create", formData, {
         withCredentials: true,
       });
 
       if (response.status === 201) {
         toast.success("Your post has been created successfully!");
         setPostAdded((prev: any) => !prev);
-        const updateXp = await axios.post(BACKEND_URL + "/api/v1/user/update-xp", {
+        const updateXp = await axios.post(import.meta.env.VITE_BACKEND_BASE_URL + "api/v1/user/update-xp", {
           xp: 10
         }, {
           withCredentials: true
@@ -91,9 +91,9 @@ export function CreatePostDialog({ setPostAdded }: { setPostAdded: any }) {
   const handleEnhanceWithAi = async () => {
     try {
       setAiResponseLoader(true);
-      const aiResponse = await axios.post("http://172.16.59.42:8000/generate_content", {
+      const aiResponse = await axios.post("http://192.168.152.223:8000/generate_content", {
         input_text: content,
-        style: "concise"
+        style: "shakespeare",
       });
       setContent(aiResponse.data.response.choices[0].text);
       console.log(aiResponse.data);
@@ -131,7 +131,7 @@ export function CreatePostDialog({ setPostAdded }: { setPostAdded: any }) {
             />
           </div>
           <div className="space-y-2">
-            <div className="flex space-x-2 items-start">
+            <div className="flex flex-col space-x-2 items-start">
               <div>
                 <label htmlFor="content" className="text-sm font-medium">
                   Content
@@ -200,11 +200,11 @@ export function CreatePostDialog({ setPostAdded }: { setPostAdded: any }) {
               </Button>
             </div>
             {imagePreview && (
-              <div className="relative aspect-square w-full mt-2 rounded-lg overflow-hidden">
+              <div className="relative h-[150px] w-full mt-2 rounded-lg overflow-hidden">
                 <img
                   src={imagePreview}
                   alt="Preview"
-                  className="object-cover w-full h-full"
+                  className="object-cover w-[100px] h-[100px]"
                 />
               </div>
             )}

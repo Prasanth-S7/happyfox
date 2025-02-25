@@ -51,21 +51,22 @@ export function CreateResourceDialog({ setResourceAdded }: { setResourceAdded: a
         withCredentials: true,
       });
 
+      console.log(response.status)
+
       if (response.status === 201) {
         toast.success("Your resource has been created successfully!");
-        const updateXp = await axios.post(BACKEND_URL + "/api/v1/user/update-xp", {
+        const updateXp = await axios.post(import.meta.env.BACKEND_BASE_URL + "/api/v1/user/update-xp", {
           xp: 20
         }, {
           withCredentials: true
         });
 
         if (updateXp.status === 200) {
+          console.log("reaches here")
           toast.success("You have gained 20 XP! 💪");
         }
         setResourceAdded((prev: any) => !prev);
-      } else {
-        toast.error("Failed to create resource. Please try again.");
-      }
+      } 
 
       setTitle("");
       setDescription("");
@@ -73,7 +74,7 @@ export function CreateResourceDialog({ setResourceAdded }: { setResourceAdded: a
       setFilePreview(null);
       setCategory(""); // Reset category
     } catch (error) {
-      toast.error("Failed to create resource. Please try again.");
+      console.log(error)
     } finally {
       setIsSubmitting(false);
     }
@@ -179,11 +180,11 @@ export function CreateResourceDialog({ setResourceAdded }: { setResourceAdded: a
               </Button>
             </div>
             {filePreview && (
-              <div className="relative aspect-square w-full mt-2 rounded-lg overflow-hidden">
+              <div className="relative h-[150px] w-full mt-2 rounded-lg overflow-hidden">
                 <img
                   src={filePreview}
                   alt="Preview"
-                  className="object-cover w-full h-full"
+                  className="object-cover w-[100px] h-[100px]"
                 />
               </div>
             )}

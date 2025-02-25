@@ -48,13 +48,14 @@ export const createEvent = async (req: Request, res: Response) => {
             category
         } = req.body;
 
+
         const avatarPath = req.files['avatar'][0].path;
         const posterPath = req.files['poster'][0].path;
 
         const event = await prisma.event.create({
             data: {
                 title,
-                by: by,
+                // : by,
                 avatar: avatarPath,
                 date: date,
                 link: link,

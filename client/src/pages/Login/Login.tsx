@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { User, Mail, Lock, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { BACKEND_URL } from "@/config/config";
 
@@ -85,6 +85,9 @@ const CardBody = ({ className = "p-4" }) => {
           <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
       </form>
+      <div className="w-full">
+        <Link className="text-center block mt-5 text-orange-500 text-sm underline underline-offset-2" to="/sign-up">Create Account</Link>
+      </div>
     </div>
   );
 };
